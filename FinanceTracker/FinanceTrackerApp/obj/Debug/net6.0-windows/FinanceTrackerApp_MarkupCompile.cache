@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\App.xaml
-11407045341
+3-1511775951
 
-11-872959022
+17-1077297761
 1972088146479
-MainWindow.xaml;
+MainWindow.xaml;Views\AccountsView.xaml;Views\InvestingAccountsView.xaml;
 
-True
+False
 

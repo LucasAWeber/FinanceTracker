@@ -4,42 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:h="clr-namespace:FinanceTrackerApp.Helpers"
         xmlns:vm="clr-namespace:FinanceTrackerApp.ViewModels"
+        xmlns:views="clr-namespace:FinanceTrackerApp.Views"
         xmlns:local="clr-namespace:FinanceTrackerApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="Black">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding SaveDataCommand}"/>
+            <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Window.Resources>
-    </Window.Resources>
     <Grid>
         <TabControl Background="Black" Foreground="White">
             <TabItem Name="Overview" Header="Overview">
                 
             </TabItem>
             <TabItem Name="Accounts" Header="Accounts">
-                <StackPanel>
-                    <DataGrid ItemsSource="{Binding Accounts, IsAsync=True}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" MinColumnWidth="100" MinRowHeight="20" CanUserResizeRows="False" Background="Black" RowBackground="DarkGray">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
-                            <DataGridTextColumn Binding="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Header="Total" Width="1*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Orientation="Horizontal" Margin="10">
-                        <TextBlock Text="Accounts Total: " Foreground="White"/>
-                        <TextBlock Text="{Binding AccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
-                    </StackPanel>
-                    
-                </StackPanel>
+                <views:AccountsView DataContext="{Binding AccountsViewModel}"/>
             </TabItem>
             <TabItem Name="Investing" Header="Investing">
-                
+                <views:InvestingAccountsView DataContext="{Binding InvestingAccountsViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>
