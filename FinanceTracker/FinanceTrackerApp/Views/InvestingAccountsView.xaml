@@ -12,7 +12,13 @@
         <h:BindingProxy x:Key="proxy" Data="{Binding}"/>
     </UserControl.Resources>
     <StackPanel>
-        <DataGrid ItemsSource="{Binding InvestingAccounts, IsAsync=True}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" MinColumnWidth="100" MinRowHeight="20" CanUserResizeRows="False" Background="Black" RowBackground="DarkGray">
+        <DataGrid ItemsSource="{Binding InvestingAccounts, IsAsync=True}" SelectedItem="{Binding SelectedInvestingAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add" Command="{Binding AddCommand}"/>
+                    <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="CurrentCellChanged">
                     <i:InvokeCommandAction Command="{Binding CalcInvestingAccountTotalCommand}"/>
@@ -24,9 +30,10 @@
                 <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=Data.InvestingAccountTypes, Source={StaticResource proxy}}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Margin="10">
+        <DockPanel Margin="10">
             <TextBlock Text="Accounts Total: " Foreground="White"/>
             <TextBlock Text="{Binding InvestingAccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
-        </StackPanel>
+            <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddCommand}" Width="50" Height="20"/>
+        </DockPanel>
     </StackPanel>
 </UserControl>

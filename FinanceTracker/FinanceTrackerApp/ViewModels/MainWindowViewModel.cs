@@ -21,6 +21,8 @@ namespace FinanceTrackerApp.ViewModels
         private AccountsViewModel _accountsViewModel = new();
         [ObservableProperty]
         private InvestingAccountsViewModel _investingAccountsViewModel = new();
+        [ObservableProperty]
+        private BudgetViewModel _budgetViewModel = new();
 
         public MainWindowViewModel()
         {

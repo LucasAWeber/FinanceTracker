@@ -10,6 +10,9 @@
     <Compile Update="Views\AccountsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\BudgetView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\InvestingAccountsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -19,6 +22,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\AccountsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\BudgetView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\InvestingAccountsView.xaml">

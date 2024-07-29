@@ -31,6 +31,18 @@
           }
         }
       },
+      "DotNetProjects.WpfToolkit.DataVisualization/6.1.94": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0-windows7.0/DotNetProjects.DataVisualization.Toolkit.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/DotNetProjects.DataVisualization.Toolkit.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
       "Microsoft.Xaml.Behaviors.Wpf/1.1.122": {
         "type": "package",
         "compile": {
@@ -109,6 +121,20 @@
         "lib/netstandard2.1/CsvHelper.xml"
       ]
     },
+    "DotNetProjects.WpfToolkit.DataVisualization/6.1.94": {
+      "sha512": "5xmRUH+/F3zRxcI8b93W9OUvOUKXpcHShj7jGJdpBAgQTNPEeMLISA/wsO5egSG74Msx+01xwaYjDFTDTUawhQ==",
+      "type": "package",
+      "path": "dotnetprojects.wpftoolkit.datavisualization/6.1.94",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "dotnetprojects.wpftoolkit.datavisualization.6.1.94.nupkg.sha512",
+        "dotnetprojects.wpftoolkit.datavisualization.nuspec",
+        "lib/net40/DotNetProjects.DataVisualization.Toolkit.dll",
+        "lib/net5.0-windows7.0/DotNetProjects.DataVisualization.Toolkit.dll",
+        "lib/net6.0-windows7.0/DotNetProjects.DataVisualization.Toolkit.dll"
+      ]
+    },
     "Microsoft.Xaml.Behaviors.Wpf/1.1.122": {
       "sha512": "SgcafT189u4qX++vSCV9FLQ4BsRXU9J2esnHA9IF8GOSgnPBulFw1CW4X/FYoOXvZwdDZxlSObJUGUg1U1wSyg==",
       "type": "package",
@@ -136,6 +162,7 @@
     "net6.0-windows7.0": [
       "CommunityToolkit.Mvvm >= 8.2.2",
       "CsvHelper >= 33.0.1",
+      "DotNetProjects.WpfToolkit.DataVisualization >= 6.1.94",
       "Microsoft.Xaml.Behaviors.Wpf >= 1.1.122"
     ]
   },
@@ -190,6 +217,10 @@
           "CsvHelper": {
             "target": "Package",
             "version": "[33.0.1, )"
+          },
+          "DotNetProjects.WpfToolkit.DataVisualization": {
+            "target": "Package",
+            "version": "[6.1.94, )"
           },
           "Microsoft.Xaml.Behaviors.Wpf": {
             "target": "Package",

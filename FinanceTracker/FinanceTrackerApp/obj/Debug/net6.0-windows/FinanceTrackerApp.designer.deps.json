@@ -22,6 +22,14 @@
           }
         }
       },
+      "DotNetProjects.WpfToolkit.DataVisualization/6.1.94": {
+        "runtime": {
+          "lib/net6.0-windows7.0/DotNetProjects.DataVisualization.Toolkit.dll": {
+            "assemblyVersion": "6.1.94.0",
+            "fileVersion": "6.1.94.0"
+          }
+        }
+      },
       "Microsoft.Xaml.Behaviors.Wpf/1.1.122": {
         "runtime": {
           "lib/net6.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
@@ -46,6 +54,13 @@
       "sha512": "sha512-fev4lynklAU2A9GVMLtwarkwaanjSYB4wUqO2nOJX5hnzObORzUqVLe+bDYCUyIIRQM4o5Bsq3CcyJR89iMmEQ==",
       "path": "csvhelper/33.0.1",
       "hashPath": "csvhelper.33.0.1.nupkg.sha512"
+    },
+    "DotNetProjects.WpfToolkit.DataVisualization/6.1.94": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5xmRUH+/F3zRxcI8b93W9OUvOUKXpcHShj7jGJdpBAgQTNPEeMLISA/wsO5egSG74Msx+01xwaYjDFTDTUawhQ==",
+      "path": "dotnetprojects.wpftoolkit.datavisualization/6.1.94",
+      "hashPath": "dotnetprojects.wpftoolkit.datavisualization.6.1.94.nupkg.sha512"
     },
     "Microsoft.Xaml.Behaviors.Wpf/1.1.122": {
       "type": "package",

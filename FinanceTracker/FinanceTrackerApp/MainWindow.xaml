@@ -29,6 +29,9 @@
             <TabItem Name="Investing" Header="Investing">
                 <views:InvestingAccountsView DataContext="{Binding InvestingAccountsViewModel}"/>
             </TabItem>
+            <TabItem Name="Budget" Header="Budget">
+                <views:BudgetView DataContext="{Binding BudgetViewModel}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

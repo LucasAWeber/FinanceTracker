@@ -30,3 +30,6 @@ C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj\Debug\net6.0-windows\Views\AccountsView.baml
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj\Debug\net6.0-windows\Views\InvestingAccountsView.g.cs
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj\Debug\net6.0-windows\Views\InvestingAccountsView.baml
+C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj\Debug\net6.0-windows\Views\BudgetView.g.cs
+C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\bin\Debug\net6.0-windows\DotNetProjects.DataVisualization.Toolkit.dll
+C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj\Debug\net6.0-windows\Views\BudgetView.baml

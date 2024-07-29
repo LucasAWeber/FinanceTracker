@@ -20,6 +20,8 @@ namespace FinanceTrackerApp.ViewModels
         private ObservableCollection<InvestingAccount> _investingAccounts = new();
         [ObservableProperty]
         private int _investingAccountsTotal = 0;
+        [ObservableProperty]
+        private InvestingAccount? _selectedInvestingAccount;
 
         public InvestingAccountsViewModel()
         {
@@ -30,6 +32,21 @@ namespace FinanceTrackerApp.ViewModels
         public void Closing()
         {
             SetData(s_investingAccountsFileName, InvestingAccounts);
+        }
+
+        [RelayCommand]
+        private void Add()
+        {
+            InvestingAccounts.Add(new());
+        }
+
+        [RelayCommand]
+        private void Delete()
+        {
+            if (SelectedInvestingAccount != null)
+            {
+                InvestingAccounts.Remove(SelectedInvestingAccount);
+            }
         }
 
         [RelayCommand]
