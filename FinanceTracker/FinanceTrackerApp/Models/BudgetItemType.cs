@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace FinanceTrackerApp.Models
 {
-    public enum InvestmentType
+    public enum BudgetItemType
     {
-        Bond,
-        Stock,
-        MutualFund,
-        ETF,
-        GIC,
-        other
+        Transportation,
+        School,
+        Groceries,
+        Health,
+        Home,
+        Utilities,
+        Other
     }
 }

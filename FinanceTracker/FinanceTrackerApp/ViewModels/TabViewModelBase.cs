@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTrackerApp.ViewModels
 {
-    public partial class AccountViewModelBase : ObservableObject
+    public abstract partial class TabViewModelBase : ObservableObject
     {
         protected static readonly string s_appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FinanceTracker");
         private static readonly CsvConfiguration s_csvConfig = new(CultureInfo.InvariantCulture)
@@ -24,8 +24,10 @@ namespace FinanceTrackerApp.ViewModels
             
         };
 
+        public abstract void Closing();
+
         /// <summary>
-        /// 
+        /// Sets data in csv file 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="filename"></param>
@@ -64,7 +66,7 @@ namespace FinanceTrackerApp.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// Gets data from csv file 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="filename"></param>

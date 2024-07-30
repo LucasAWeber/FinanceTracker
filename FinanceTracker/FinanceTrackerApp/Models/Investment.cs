@@ -38,17 +38,22 @@ namespace FinanceTrackerApp.Models
 
         public async Task UpdateInvestment()
         {
-            if (StockExchange == StockExchange.NYSE)
+            string symbol = Symbol;
+            if (!string.IsNullOrWhiteSpace(symbol) && StockExchange != StockExchange.none && Type != InvestmentType.other)
             {
+                if (StockExchange == StockExchange.TSX)
+                {
+                    symbol += ".TO";
+                }
                 try
                 {
-                    var data = await Yahoo.GetHistoricalAsync(Symbol, DateTime.Now, DateTime.Now);
+                    DateTime yesterday = DateTime.Now.AddDays(-1);
+                    var data = await Yahoo.GetHistoricalAsync(symbol, yesterday, yesterday);
                     Value = (double?)data.LastOrDefault()?.Close ?? Value;
                 }
                 catch
                 {
-                    Debug.WriteLine("Invalid symbol");
-                    Value = 0;
+                    Debug.WriteLine($"Invalid symbol {symbol}");
                 }
             }
             

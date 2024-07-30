@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTrackerApp.ViewModels
 {
-    public partial class AccountsViewModel : AccountViewModelBase
+    public partial class AccountsViewModel : TabViewModelBase
     {
         private static readonly string s_accountsFileName = Path.Combine(s_appDataFolder, "Accounts.csv");
         [ObservableProperty]
@@ -23,13 +23,13 @@ namespace FinanceTrackerApp.ViewModels
 
         public AccountsViewModel()
         {
-            Accounts = GetData<Account>(s_accountsFileName);
+            Accounts = GetData<Account, AccountMap>(s_accountsFileName);
             CalcAccountTotal();
         }
 
-        public void Closing()
+        public override void Closing()
         {
-            SetData(s_accountsFileName, Accounts);
+            SetData<Account, AccountMap>(s_accountsFileName, Accounts);
         }
 
         [RelayCommand]

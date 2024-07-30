@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace FinanceTrackerApp.Models
 {
-    public enum InvestmentType
+    public enum FrequencyType
     {
-        Bond,
-        Stock,
-        MutualFund,
-        ETF,
-        GIC,
-        other
+        Daily,
+        Weekly,
+        Monthly,
+        Yearly
     }
 }

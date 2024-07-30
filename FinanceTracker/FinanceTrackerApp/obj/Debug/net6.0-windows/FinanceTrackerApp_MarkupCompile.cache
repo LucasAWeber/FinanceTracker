@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\App.xaml
 4912786765
 
-20-103865938
+23689945937
 2022016363676
 MainWindow.xaml;Views\AccountsView.xaml;Views\BudgetView.xaml;Views\InvestingAccountsView.xaml;
 
-False
+True
 

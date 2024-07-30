@@ -13,7 +13,7 @@ using YahooFinanceApi;
 
 namespace FinanceTrackerApp.ViewModels
 {
-    public partial class InvestingAccountsViewModel : AccountViewModelBase
+    public partial class InvestingAccountsViewModel : TabViewModelBase
     {
         private static readonly string s_investingAccountsFileName = Path.Combine(s_appDataFolder, "InvestingAccounts.csv");
         [ObservableProperty]
@@ -41,7 +41,7 @@ namespace FinanceTrackerApp.ViewModels
             _ = Update();
         }   
 
-        public void Closing()
+        public override void Closing()
         {
             foreach (InvestingAccount account in InvestingAccounts)
             {

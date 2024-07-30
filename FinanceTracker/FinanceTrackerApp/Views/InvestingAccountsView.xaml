@@ -58,8 +58,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <DockPanel Margin="10">
-            <TextBlock Text="Accounts Total: " Foreground="White"/>
-            <TextBlock Text="{Binding InvestingAccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+            <TextBlock Text="Account Total: " Foreground="White"/>
+            <TextBlock Text="{Binding SelectedInvestingAccount.Total, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
             <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddInvestmentCommand}" Width="50" Height="20"/>
         </DockPanel>
     </StackPanel>
