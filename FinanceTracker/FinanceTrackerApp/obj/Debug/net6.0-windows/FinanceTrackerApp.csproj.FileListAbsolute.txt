@@ -33,3 +33,7 @@ C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj\Debug\net6.0-windows\Views\BudgetView.g.cs
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\bin\Debug\net6.0-windows\DotNetProjects.DataVisualization.Toolkit.dll
 C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\obj\Debug\net6.0-windows\Views\BudgetView.baml
+C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\bin\Debug\net6.0-windows\Flurl.dll
+C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\bin\Debug\net6.0-windows\Flurl.Http.dll
+C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+C:\Users\lweber\source\repos\FinanceTracker\FinanceTracker\FinanceTrackerApp\bin\Debug\net6.0-windows\YahooFinanceApi.dll

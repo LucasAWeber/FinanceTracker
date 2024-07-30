@@ -4,10 +4,12 @@ using FinanceTrackerApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YahooFinanceApi;
 
 namespace FinanceTrackerApp.ViewModels
 {
@@ -17,31 +19,51 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Array _investingAccountTypes = Enum.GetValues(typeof(InvestingAccountType));
         [ObservableProperty]
+        private Array _investmentTypes = Enum.GetValues(typeof(InvestmentType));
+        [ObservableProperty]
+        private Array _stockExchanges = Enum.GetValues(typeof(StockExchange));
+        [ObservableProperty]
         private ObservableCollection<InvestingAccount> _investingAccounts = new();
         [ObservableProperty]
-        private int _investingAccountsTotal = 0;
+        private double _investingAccountsTotal = 0;
         [ObservableProperty]
         private InvestingAccount? _selectedInvestingAccount;
+        [ObservableProperty]
+        private Investment? _selectedInvestment;
 
         public InvestingAccountsViewModel()
         {
-            InvestingAccounts = GetData<InvestingAccount>(s_investingAccountsFileName);
-            CalcInvestingAccountTotal();
-        }
+            InvestingAccounts = GetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName);
+            foreach(InvestingAccount account in InvestingAccounts)
+            {
+                account.Investments = GetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder,account.Id + ".csv"));
+            }
+            _ = Update();
+        }   
 
         public void Closing()
         {
-            SetData(s_investingAccountsFileName, InvestingAccounts);
+            foreach (InvestingAccount account in InvestingAccounts)
+            {
+                SetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder, account.Id + ".csv"), account.Investments);
+            }
+            SetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName, InvestingAccounts);
         }
 
         [RelayCommand]
-        private void Add()
+        private void AddAccount()
         {
             InvestingAccounts.Add(new());
         }
 
         [RelayCommand]
-        private void Delete()
+        private void AddInvestment()
+        {
+            SelectedInvestingAccount?.Investments.Add(new());
+        }
+
+        [RelayCommand]
+        private void DeleteAccount()
         {
             if (SelectedInvestingAccount != null)
             {
@@ -50,11 +72,21 @@ namespace FinanceTrackerApp.ViewModels
         }
 
         [RelayCommand]
-        private void CalcInvestingAccountTotal()
+        private void DeleteInvestment()
+        {
+            if (SelectedInvestment != null)
+            {
+                SelectedInvestingAccount?.Investments.Remove(SelectedInvestment);
+            }
+        }
+
+        [RelayCommand]
+        private async Task Update()
         {
             InvestingAccountsTotal = 0;
             foreach (InvestingAccount account in InvestingAccounts)
             {
+                await account.UpdateInvestmentAccount();
                 InvestingAccountsTotal += account.Total;
             }
         }

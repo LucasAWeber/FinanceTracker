@@ -21,6 +21,7 @@ namespace FinanceTrackerApp.ViewModels
         {
             HasHeaderRecord = false,
             MissingFieldFound = null,
+            
         };
 
         /// <summary>
@@ -31,10 +32,33 @@ namespace FinanceTrackerApp.ViewModels
         /// <param name="data"></param>
         protected static void SetData<T>(string filename, ObservableCollection<T> data)
         {
+            if (!File.Exists(filename))
+            {
+                File.Create(filename).Close();
+                File.SetAttributes(filename, File.GetAttributes(filename) | FileAttributes.Hidden);
+                File.Encrypt(filename);
+            }
             FileInfo myFile = new(filename);
             myFile.Attributes &= ~FileAttributes.Hidden;
             using StreamWriter writer = new(filename);
             using CsvWriter csvWrite = new(writer, s_csvConfig);
+            csvWrite.WriteRecords(data);
+            myFile.Attributes |= FileAttributes.Hidden;
+        }
+
+        protected static void SetData<T, F>(string filename, ObservableCollection<T> data) where F : ClassMap<T>
+        {
+            if (!File.Exists(filename))
+            {
+                File.Create(filename).Close();
+                File.SetAttributes(filename, File.GetAttributes(filename) | FileAttributes.Hidden);
+                File.Encrypt(filename);
+            }
+            FileInfo myFile = new(filename);
+            myFile.Attributes &= ~FileAttributes.Hidden;
+            using StreamWriter writer = new(filename);
+            using CsvWriter csvWrite = new(writer, s_csvConfig);
+            csvWrite.Context.RegisterClassMap<F>();
             csvWrite.WriteRecords(data);
             myFile.Attributes |= FileAttributes.Hidden;
         }
@@ -57,6 +81,24 @@ namespace FinanceTrackerApp.ViewModels
             myFile.Attributes &= ~FileAttributes.Hidden;
             using StreamReader reader = new(filename);
             using CsvReader csvRead = new(reader, s_csvConfig);
+            IEnumerable<T> records = csvRead.GetRecords<T>();
+            myFile.Attributes |= FileAttributes.Hidden;
+            return new ObservableCollection<T>(records);
+        }
+
+        protected static ObservableCollection<T> GetData<T, F>(string filename) where F : ClassMap<T>
+        {
+            if (!File.Exists(filename))
+            {
+                File.Create(filename).Close();
+                File.SetAttributes(filename, File.GetAttributes(filename) | FileAttributes.Hidden);
+                File.Encrypt(filename);
+            }
+            FileInfo myFile = new(filename);
+            myFile.Attributes &= ~FileAttributes.Hidden;
+            using StreamReader reader = new(filename);
+            using CsvReader csvRead = new(reader, s_csvConfig);
+            csvRead.Context.RegisterClassMap<F>();
             IEnumerable<T> records = csvRead.GetRecords<T>();
             myFile.Attributes |= FileAttributes.Hidden;
             return new ObservableCollection<T>(records);

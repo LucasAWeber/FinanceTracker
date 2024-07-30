@@ -15,13 +15,13 @@
         <DataGrid ItemsSource="{Binding InvestingAccounts, IsAsync=True}" SelectedItem="{Binding SelectedInvestingAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add" Command="{Binding AddCommand}"/>
-                    <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
+                    <MenuItem Header="Add" Command="{Binding AddAccountCommand}"/>
+                    <MenuItem Header="Delete" Command="{Binding DeleteAccountCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="CurrentCellChanged">
-                    <i:InvokeCommandAction Command="{Binding CalcInvestingAccountTotalCommand}"/>
+                <i:EventTrigger EventName="CellEditEnding">
+                    <i:InvokeCommandAction Command="{Binding UpdateCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
@@ -33,7 +33,34 @@
         <DockPanel Margin="10">
             <TextBlock Text="Accounts Total: " Foreground="White"/>
             <TextBlock Text="{Binding InvestingAccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddCommand}" Width="50" Height="20"/>
+            <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddAccountCommand}" Width="50" Height="20"/>
+        </DockPanel>
+        <DataGrid ItemsSource="{Binding SelectedInvestingAccount.Investments, IsAsync=True}" SelectedItem="{Binding SelectedInvestment}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add" Command="{Binding AddInvestmentCommand}"/>
+                    <MenuItem Header="Delete" Command="{Binding DeleteInvestmentCommand}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="CellEditEnding">
+                    <i:InvokeCommandAction Command="{Binding UpdateCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding Symbol, UpdateSourceTrigger=PropertyChanged}" Header="Symbol" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding Shares, UpdateSourceTrigger=PropertyChanged}" Header="Shares" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding Value}" Header="Value" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding Total}" Header="Total ($)" IsReadOnly="True" Width="1*"/>
+                <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=Data.InvestmentTypes, Source={StaticResource proxy}}"/>
+                <DataGridComboBoxColumn TextBinding="{Binding StockExchange}" Header="Stock Exchange" ItemsSource="{Binding Path=Data.StockExchanges, Source={StaticResource proxy}}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Margin="10">
+            <TextBlock Text="Accounts Total: " Foreground="White"/>
+            <TextBlock Text="{Binding InvestingAccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+            <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddInvestmentCommand}" Width="50" Height="20"/>
         </DockPanel>
     </StackPanel>
 </UserControl>
