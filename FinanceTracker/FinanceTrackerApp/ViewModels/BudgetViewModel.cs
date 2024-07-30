@@ -15,14 +15,21 @@ namespace FinanceTrackerApp.ViewModels
     {
         private static readonly string s_budgetFileName = Path.Combine(s_appDataFolder, "Budget.csv");
         [ObservableProperty]
+        private Array _budgetItemTypes = Enum.GetValues(typeof(BudgetItemType));
+        [ObservableProperty]
+        private Array _frequencyTypes = Enum.GetValues(typeof(FrequencyType));
+        [ObservableProperty]
+        private Accounts _accounts;
+        [ObservableProperty]
         private ObservableCollection<BudgetItem> _budgetItems = new();
         [ObservableProperty]
         private int _budgetTotal = 0;
         [ObservableProperty]
         private BudgetItem? _selectedBudgetItem;
 
-        public BudgetViewModel()
+        public BudgetViewModel(Accounts accounts)
         {
+            Accounts = accounts;
             BudgetItems = GetData<BudgetItem, BudgetItemMap>(s_budgetFileName);
         }
 
@@ -43,6 +50,22 @@ namespace FinanceTrackerApp.ViewModels
             if (SelectedBudgetItem != null)
             {
                 BudgetItems.Remove(SelectedBudgetItem);
+            }
+        }
+
+        [RelayCommand]
+        private void Update()
+        {
+            foreach(BudgetItem item in BudgetItems)
+            {
+                if (!string.IsNullOrWhiteSpace(item.AccountId))
+                {
+                    item.Account = Accounts.AccountList.Where(account => account.Id == item.AccountId).First();
+                    item.AccountName = item.Account.Name;
+                } else if (item.Account != null && !string.IsNullOrWhiteSpace(item.Account.Name))
+                {
+                    //item.AccountId = 
+                }
             }
         }
     }

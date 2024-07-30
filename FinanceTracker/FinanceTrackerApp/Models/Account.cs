@@ -23,6 +23,9 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         [Index(3)]
         private float _interest = 0;
+        [ObservableProperty]
+        [Index(4)]
+        private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
     }
 
     public sealed class AccountMap : ClassMap<Account>
@@ -33,6 +36,7 @@ namespace FinanceTrackerApp.Models
             Map(m => m.Name).Index(1);
             Map(m => m.Total).Index(2);
             Map(m => m.Interest).Index(3);
+            Map(m => m.Date).Index(4);
         }
     }
 }

@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:h="clr-namespace:FinanceTrackerApp.Helpers"
              xmlns:local="clr-namespace:FinanceTrackerApp.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <h:BindingProxy x:Key="proxy" Data="{Binding}"/>
+    </UserControl.Resources>
     <WrapPanel Orientation="Horizontal">
         <StackPanel>
             <DataGrid ItemsSource="{Binding BudgetItems, IsAsync=True}" SelectedItem="{Binding SelectedBudgetItem}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
@@ -18,13 +22,15 @@
                 </DataGrid.ContextMenu>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="CurrentCellChanged">
-                        <i:InvokeCommandAction Command="{Binding CalcAccountTotalCommand}"/>
+                        <i:InvokeCommandAction Command="{Binding UpdateCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
                     <DataGridTextColumn Binding="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Header="Total ($)" Width="1*"/>
-                    <DataGridTextColumn Binding="{Binding Interest}" Header="Interest (%)" Width="1*"/>
+                    <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=Data.BudgetItemTypes, Source={StaticResource proxy}}" Width="1*"/>
+                    <DataGridComboBoxColumn TextBinding="{Binding Frequency}" Header="Frequency" ItemsSource="{Binding Path=Data.FrequencyTypes, Source={StaticResource proxy}}" Width="1*"/>
+                    <DataGridComboBoxColumn TextBinding="{Binding AccountName}" Header="Account" ItemsSource="{Binding Path=Data.Accounts.AccountNameList, Source={StaticResource proxy}}" Width="1*"/>
                 </DataGrid.Columns>
             </DataGrid>
             <DockPanel Margin="10">
