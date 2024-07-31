@@ -9,11 +9,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <h:BindingProxy x:Key="proxy" Data="{Binding}"/>
+        <h:BindingProxy x:Key="proxy" BindingDataContext="{Binding}"/>
     </UserControl.Resources>
     <WrapPanel Orientation="Horizontal">
         <StackPanel>
-            <DataGrid ItemsSource="{Binding BudgetItems, IsAsync=True}" SelectedItem="{Binding SelectedBudgetItem}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+            <DataGrid ItemsSource="{Binding Data.BudgetItems, IsAsync=True}" SelectedItem="{Binding SelectedBudgetItem}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Add" Command="{Binding AddCommand}"/>
@@ -21,22 +21,38 @@
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="CurrentCellChanged">
+                    <i:EventTrigger EventName="CellEditEnding">
                         <i:InvokeCommandAction Command="{Binding UpdateCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
                     <DataGridTextColumn Binding="{Binding Total}" Header="Total ($)" Width="1*"/>
-                    <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=Data.BudgetItemTypes, Source={StaticResource proxy}}" Width="1*"/>
-                    <DataGridComboBoxColumn TextBinding="{Binding Frequency}" Header="Frequency" ItemsSource="{Binding Path=Data.FrequencyTypes, Source={StaticResource proxy}}" Width="1*"/>
-                    <DataGridComboBoxColumn TextBinding="{Binding AccountName}" Header="Account" ItemsSource="{Binding Path=Data.Accounts.AccountNameList, Source={StaticResource proxy}}" Width="1*"/>
+                    <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=BindingDataContext.BudgetItemTypes, Source={StaticResource proxy}}" Width="1*"/>
+                    <DataGridComboBoxColumn TextBinding="{Binding Frequency}" Header="Frequency" ItemsSource="{Binding Path=BindingDataContext.FrequencyTypes, Source={StaticResource proxy}}" Width="1*"/>
+                    <DataGridComboBoxColumn TextBinding="{Binding AccountName}" Header="Account" ItemsSource="{Binding Path=BindingDataContext.Data.AccountNameList, Source={StaticResource proxy}}" Width="1*"/>
                 </DataGrid.Columns>
             </DataGrid>
             <DockPanel Margin="10">
-                <TextBlock Text="Total Budget: " Foreground="White"/>
-                <TextBlock Text="{Binding AccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
-                <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddCommand}" Width="50" Height="20"/>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Total Daily Budget: " Foreground="White"/>
+                        <TextBlock Text="{Binding BudgetDailyTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Total Weekly Budget: " Foreground="White"/>
+                        <TextBlock Text="{Binding BudgetWeeklyTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Total Monthly Budget: " Foreground="White"/>
+                        <TextBlock Text="{Binding BudgetMonthlyTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Total Yearly Budget: " Foreground="White"/>
+                        <TextBlock Text="{Binding BudgetYearlyTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button Margin="0,2,0,0" DockPanel.Dock="Right" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Add" Command="{Binding AddCommand}" Width="50" Height="20"/>
             </DockPanel>
         </StackPanel>
     </WrapPanel>

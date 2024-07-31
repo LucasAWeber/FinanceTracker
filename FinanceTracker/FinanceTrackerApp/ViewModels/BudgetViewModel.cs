@@ -19,30 +19,35 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Array _frequencyTypes = Enum.GetValues(typeof(FrequencyType));
         [ObservableProperty]
-        private Accounts _accounts;
+        private Data _data;
+        
         [ObservableProperty]
-        private ObservableCollection<BudgetItem> _budgetItems = new();
+        private float _budgetDailyTotal = 0;
         [ObservableProperty]
-        private int _budgetTotal = 0;
+        private float _budgetWeeklyTotal = 0;
+        [ObservableProperty]
+        private float _budgetMonthlyTotal = 0;
+        [ObservableProperty]
+        private float _budgetYearlyTotal = 0;
         [ObservableProperty]
         private BudgetItem? _selectedBudgetItem;
 
-        public BudgetViewModel(Accounts accounts)
+        public BudgetViewModel(Data data)
         {
-            Accounts = accounts;
-            BudgetItems = GetData<BudgetItem, BudgetItemMap>(s_budgetFileName);
+            Data = data;
+            Data.BudgetItems = GetData<BudgetItem, BudgetItemMap>(s_budgetFileName);
             Update();
         }
 
         public override void Closing()
         {
-            SetData<BudgetItem, BudgetItemMap>(s_budgetFileName, BudgetItems);
+            SetData<BudgetItem, BudgetItemMap>(s_budgetFileName, Data.BudgetItems);
         }
 
         [RelayCommand]
         private void Add()
         {
-            BudgetItems.Add(new());
+            Data.BudgetItems.Add(new());
         }
 
         [RelayCommand]
@@ -50,18 +55,24 @@ namespace FinanceTrackerApp.ViewModels
         {
             if (SelectedBudgetItem != null)
             {
-                BudgetItems.Remove(SelectedBudgetItem);
+                Data.BudgetItems.Remove(SelectedBudgetItem);
             }
         }
 
         [RelayCommand]
         private void Update()
         {
-            foreach(BudgetItem item in BudgetItems)
+            float dailyTotal = 0;
+            float weeklyTotal = 0;
+            float monthlyTotal = 0;
+            float yearlyTotal = 0;
+
+            foreach(BudgetItem item in Data.BudgetItems)
             {
+                // Handles the account linking logic
                 if (!string.IsNullOrWhiteSpace(item.AccountName) && item.AccountName != "None")
                 {
-                    item.Account = Accounts.AccountList.Where(account => account.Name == item.AccountName).First();
+                    item.Account = Data.AccountList.Where(account => account.Name == item.AccountName).First();
                     item.AccountId = item.Account.Id;
                 }
                 else if (item.Account != null && item.AccountName == "None")
@@ -71,10 +82,43 @@ namespace FinanceTrackerApp.ViewModels
                 }
                 else if (!string.IsNullOrWhiteSpace(item.AccountId))
                 {
-                    item.Account = Accounts.AccountList.Where(account => account.Id == item.AccountId).First();
+                    item.Account = Data.AccountList.Where(account => account.Id == item.AccountId).First();
                     item.AccountName = item.Account.Name;
                 }
+
+                // Handles the total budget values
+                switch(item.Frequency)
+                {
+                    case FrequencyType.Daily:
+                        dailyTotal += item.Total;
+                        weeklyTotal += item.Total * 7;
+                        monthlyTotal += item.Total * 30;
+                        yearlyTotal += item.Total * 365;
+                        break;
+                    case FrequencyType.Weekly:
+                        dailyTotal += item.Total / 7;
+                        weeklyTotal += item.Total;
+                        monthlyTotal += item.Total * 4;
+                        yearlyTotal += item.Total * 52;
+                        break;
+                    case FrequencyType.Monthly:
+                        dailyTotal += item.Total / 30;
+                        weeklyTotal += item.Total / 4;
+                        monthlyTotal += item.Total;
+                        yearlyTotal += item.Total * 12;
+                        break;
+                    case FrequencyType.Yearly:
+                        dailyTotal += item.Total / 365;
+                        weeklyTotal += item.Total / 52;
+                        monthlyTotal += item.Total / 12;
+                        yearlyTotal += item.Total;
+                        break;
+                }
             }
+            BudgetDailyTotal = dailyTotal;
+            BudgetWeeklyTotal = weeklyTotal;
+            BudgetMonthlyTotal = monthlyTotal;
+            BudgetYearlyTotal = yearlyTotal;
         }
     }
 }

@@ -13,6 +13,9 @@
     <Compile Update="Views\BudgetView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\DebtView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\InvestingAccountsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -25,6 +28,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\BudgetView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\DebtView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\InvestingAccountsView.xaml">

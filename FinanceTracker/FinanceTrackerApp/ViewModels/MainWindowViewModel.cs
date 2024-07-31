@@ -18,7 +18,7 @@ namespace FinanceTrackerApp.ViewModels
     public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
-        private Accounts _accounts = new();
+        private Data _accounts = new();
         [ObservableProperty]
         private AccountsViewModel _accountsViewModel;
         [ObservableProperty]

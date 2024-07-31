@@ -18,14 +18,14 @@ namespace FinanceTrackerApp.Helpers
 
         #endregion
 
-        public object Data
+        public object BindingDataContext
         {
-            get { return (object)GetValue(DataProperty); }
-            set { SetValue(DataProperty, value); }
+            get { return (object)GetValue(BindingDataContextProperty); }
+            set { SetValue(BindingDataContextProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Data.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DataProperty =
-            DependencyProperty.Register("Data", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty BindingDataContextProperty =
+            DependencyProperty.Register("BindingDataContext", typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
     }
 }

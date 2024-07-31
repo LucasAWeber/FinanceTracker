@@ -33,7 +33,7 @@
                 <views:BudgetView DataContext="{Binding BudgetViewModel}"/>
             </TabItem>
             <TabItem Name="Debt" Header="Debt">
-                
+                <views:DebtView DataContext="{Binding DebtViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>

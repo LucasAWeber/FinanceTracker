@@ -15,28 +15,28 @@ namespace FinanceTrackerApp.ViewModels
     {
         private static readonly string s_accountsFileName = Path.Combine(s_appDataFolder, "Accounts.csv");
         [ObservableProperty]
-        private Accounts _accounts;
+        private Data _data;
         [ObservableProperty]
         private float _accountsTotal = 0;
         [ObservableProperty]
         private Account? _selectedAccount;
 
-        public AccountsViewModel(Accounts accounts)
+        public AccountsViewModel(Data data)
         {
-            Accounts = accounts;
-            Accounts.AccountList = GetData<Account, AccountMap>(s_accountsFileName);
+            Data = data;
+            Data.AccountList = GetData<Account, AccountMap>(s_accountsFileName);
             Update();
         }
 
         public override void Closing()
         {
-            SetData<Account, AccountMap>(s_accountsFileName, Accounts.AccountList);
+            SetData<Account, AccountMap>(s_accountsFileName, Data.AccountList);
         }
 
         [RelayCommand]
         private void Add()
         {
-            Accounts.AccountList.Add(new());
+            Data.AccountList.Add(new());
         }
 
         [RelayCommand]
@@ -44,7 +44,7 @@ namespace FinanceTrackerApp.ViewModels
         {
             if (SelectedAccount != null)
             {
-                Accounts.AccountList.Remove(SelectedAccount);
+                Data.AccountList.Remove(SelectedAccount);
             }
         }
 
@@ -52,7 +52,7 @@ namespace FinanceTrackerApp.ViewModels
         private void Update()
         {
             AccountsTotal = 0;
-            foreach (Account account in Accounts.AccountList)
+            foreach (Account account in Data.AccountList)
             {
                 AccountsTotal += account.Total;
             }

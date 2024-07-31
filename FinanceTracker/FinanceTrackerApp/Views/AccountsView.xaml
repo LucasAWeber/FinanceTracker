@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-        <DataGrid ItemsSource="{Binding Accounts.AccountList, IsAsync=True}" SelectedItem="{Binding SelectedAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+        <DataGrid ItemsSource="{Binding Data.AccountList, IsAsync=True}" SelectedItem="{Binding SelectedAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add" Command="{Binding AddCommand}"/>
@@ -16,7 +16,7 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="CurrentCellChanged">
+                <i:EventTrigger EventName="CellEditEnding">
                     <i:InvokeCommandAction Command="{Binding UpdateCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
@@ -27,9 +27,11 @@
             </DataGrid.Columns>
         </DataGrid>
         <DockPanel Margin="10">
-            <TextBlock Text="Accounts Total: " Foreground="White"/>
-            <TextBlock Text="{Binding AccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddCommand}" Width="50" Height="20"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Accounts Total: " Foreground="White"/>
+                <TextBlock Text="{Binding AccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+            </StackPanel>
+            <Button DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddCommand}" Width="50" Height="20"/>
         </DockPanel>
     </StackPanel>
 </UserControl>

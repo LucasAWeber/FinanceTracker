@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTrackerApp.Models
 {
-    public partial class Accounts : ObservableObject
+    public partial class Data : ObservableObject
     {
         [ObservableProperty]
         private ObservableCollection<string> _accountNameList = new();
@@ -45,5 +45,8 @@ namespace FinanceTrackerApp.Models
                 }
             }
         }
+
+        [ObservableProperty]
+        private ObservableCollection<BudgetItem> _budgetItems = new();
     }
 }

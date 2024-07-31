@@ -47,6 +47,7 @@ namespace FinanceTrackerApp.Models
                     symbol += ".TO";
                 } else if (StockExchange == StockExchange.NYSE)
                 {
+                    // Change how this conversion is calculated and possibly add seperate field for currency type
                     conversion = 1.35f;
                 }
                 try
