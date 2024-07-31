@@ -27,7 +27,7 @@
                 </i:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
-                    <DataGridTextColumn Binding="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Header="Total ($)" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding Total}" Header="Total ($)" Width="1*"/>
                     <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=Data.BudgetItemTypes, Source={StaticResource proxy}}" Width="1*"/>
                     <DataGridComboBoxColumn TextBinding="{Binding Frequency}" Header="Frequency" ItemsSource="{Binding Path=Data.FrequencyTypes, Source={StaticResource proxy}}" Width="1*"/>
                     <DataGridComboBoxColumn TextBinding="{Binding AccountName}" Header="Account" ItemsSource="{Binding Path=Data.Accounts.AccountNameList, Source={StaticResource proxy}}" Width="1*"/>

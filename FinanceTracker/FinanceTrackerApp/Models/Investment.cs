@@ -22,34 +22,44 @@ namespace FinanceTrackerApp.Models
         private string _symbol = "";
         [ObservableProperty]
         [Index(2)]
-        private int _shares = 1;
+        private float _shares = 1;
         [ObservableProperty]
         [Index(3)]
-        private double _value = 0;
+        private float _value = 0;
         [ObservableProperty]
         [Index(4)]
-        private double _total = 0;
+        private float _total = 0;
         [ObservableProperty]
         [Index(5)]
         private InvestmentType _type = InvestmentType.other;
         [ObservableProperty]
-        [Index(6)]
+        [Index(7)]
         private StockExchange _stockExchange = StockExchange.none;
 
         public async Task UpdateInvestment()
         {
+            float conversion = 1;
             string symbol = Symbol;
-            if (!string.IsNullOrWhiteSpace(symbol) && StockExchange != StockExchange.none && Type != InvestmentType.other)
+            if (!string.IsNullOrWhiteSpace(symbol) && StockExchange != StockExchange.none && Type != InvestmentType.other && Type != InvestmentType.Cash)
             {
                 if (StockExchange == StockExchange.TSX)
                 {
                     symbol += ".TO";
+                } else if (StockExchange == StockExchange.NYSE)
+                {
+                    conversion = 1.35f;
                 }
                 try
                 {
-                    DateTime yesterday = DateTime.Now.AddDays(-1);
-                    var data = await Yahoo.GetHistoricalAsync(symbol, yesterday, yesterday);
-                    Value = (double?)data.LastOrDefault()?.Close ?? Value;
+                    // market closes 4:00pm
+                    TimeOnly marketClose = new(16, 0);
+                    // Use yesterday as most recent (as to avoid constantly updating prices)
+                    DateTime yesterday = DateOnly.FromDateTime(DateTime.Now.AddDays(-1)).ToDateTime(marketClose);
+                    // Used to get the day range from 'dayBuffer' to Yesterday incase the market was closed past few days (accounts for weekends and weekday holidays)
+                    DateTime dayBuffer = yesterday.AddDays(-4);
+                    
+                    var data = await Yahoo.GetHistoricalAsync(symbol, dayBuffer, yesterday);
+                    Value = conversion * (float?)data.LastOrDefault()?.Close ?? Value;
                 }
                 catch
                 {

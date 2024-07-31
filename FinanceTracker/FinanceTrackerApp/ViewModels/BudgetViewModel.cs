@@ -31,6 +31,7 @@ namespace FinanceTrackerApp.ViewModels
         {
             Accounts = accounts;
             BudgetItems = GetData<BudgetItem, BudgetItemMap>(s_budgetFileName);
+            Update();
         }
 
         public override void Closing()
@@ -58,13 +59,20 @@ namespace FinanceTrackerApp.ViewModels
         {
             foreach(BudgetItem item in BudgetItems)
             {
-                if (!string.IsNullOrWhiteSpace(item.AccountId))
+                if (!string.IsNullOrWhiteSpace(item.AccountName) && item.AccountName != "None")
+                {
+                    item.Account = Accounts.AccountList.Where(account => account.Name == item.AccountName).First();
+                    item.AccountId = item.Account.Id;
+                }
+                else if (item.Account != null && item.AccountName == "None")
+                {
+                    item.Account = null;
+                    item.AccountId = "";
+                }
+                else if (!string.IsNullOrWhiteSpace(item.AccountId))
                 {
                     item.Account = Accounts.AccountList.Where(account => account.Id == item.AccountId).First();
                     item.AccountName = item.Account.Name;
-                } else if (item.Account != null && !string.IsNullOrWhiteSpace(item.Account.Name))
-                {
-                    //item.AccountId = 
                 }
             }
         }

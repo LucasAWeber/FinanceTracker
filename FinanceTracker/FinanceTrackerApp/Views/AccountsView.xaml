@@ -22,7 +22,7 @@
             </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
-                <DataGridTextColumn Binding="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Header="Total ($)" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding Total}" Header="Total ($)" Width="1*"/>
                 <DataGridTextColumn Binding="{Binding Interest}" Header="Interest (%)" Width="1*"/>
             </DataGrid.Columns>
         </DataGrid>

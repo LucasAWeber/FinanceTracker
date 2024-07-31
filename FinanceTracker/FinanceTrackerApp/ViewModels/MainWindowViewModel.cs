@@ -28,7 +28,7 @@ namespace FinanceTrackerApp.ViewModels
 
         public MainWindowViewModel()
         {
-            InvestingAccountsViewModel = new();
+            InvestingAccountsViewModel = new(Accounts);
             AccountsViewModel = new(Accounts);
             BudgetViewModel = new(Accounts);
         }

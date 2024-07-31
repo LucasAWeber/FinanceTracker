@@ -12,7 +12,7 @@
         <h:BindingProxy x:Key="proxy" Data="{Binding}"/>
     </UserControl.Resources>
     <StackPanel>
-        <DataGrid ItemsSource="{Binding InvestingAccounts, IsAsync=True}" SelectedItem="{Binding SelectedInvestingAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+        <DataGrid ItemsSource="{Binding Accounts.InvestingAccountList, IsAsync=True}" SelectedItem="{Binding SelectedInvestingAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add" Command="{Binding AddAccountCommand}"/>
@@ -26,7 +26,7 @@
             </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
-                <DataGridTextColumn Binding="{Binding Total, UpdateSourceTrigger=PropertyChanged}" Header="Total ($)" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding Total, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Header="Total ($)" Width="1*"/>
                 <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=Data.InvestingAccountTypes, Source={StaticResource proxy}}"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -50,7 +50,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
                 <DataGridTextColumn Binding="{Binding Symbol, UpdateSourceTrigger=PropertyChanged}" Header="Symbol" Width="1*"/>
-                <DataGridTextColumn Binding="{Binding Shares, UpdateSourceTrigger=PropertyChanged}" Header="Shares" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding Shares}" Header="Shares" Width="1*"/>
                 <DataGridTextColumn Binding="{Binding Value}" Header="Value" Width="1*"/>
                 <DataGridTextColumn Binding="{Binding Total}" Header="Total ($)" IsReadOnly="True" Width="1*"/>
                 <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=Data.InvestmentTypes, Source={StaticResource proxy}}"/>

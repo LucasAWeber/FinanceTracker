@@ -8,12 +8,19 @@ namespace FinanceTrackerApp.Models
 {
     public enum BudgetItemType
     {
+        Housing,
         Transportation,
-        School,
-        Groceries,
-        Health,
-        Home,
+        Food,
         Utilities,
+        Clothing,
+        Healthcare,
+        Insurance,
+        Personal,
+        Debt,
+        Invest,
+        Education,
+        Gifts,
+        Entertainment,
         Other
     }
 }

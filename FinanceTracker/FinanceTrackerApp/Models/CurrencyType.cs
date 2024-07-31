@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace FinanceTrackerApp.Models
 {
-    public enum InvestmentType
+    public enum CurrencyType
     {
-        Bond,
-        Stock,
-        MutualFund,
-        ETF,
-        GIC,
-        Cash,
-        other
+        CAD,
+        USD
     }
 }

@@ -19,7 +19,7 @@ namespace FinanceTrackerApp.Models
         private string _name = "";
         [ObservableProperty]
         [Index(2)]
-        private int _total = 0;
+        private float _total = 0;
         [ObservableProperty]
         [Index(3)]
         private float _interest = 0;

@@ -22,7 +22,7 @@ namespace FinanceTrackerApp.Models
         private string _name = "";
         [ObservableProperty]
         [Index(2)]
-        private double _total = 0;
+        private float _total = 0;
         [ObservableProperty]
         [Index(3)]
         private InvestingAccountType _type = InvestingAccountType.nonregistered;
@@ -32,19 +32,19 @@ namespace FinanceTrackerApp.Models
 
         public async Task UpdateInvestmentAccount()
         {
-            Total = 0;
+            float total = 0;
             try
             {
                 foreach (Investment investment in Investments)
                 {
                     await investment.UpdateInvestment();
-                    Total += investment.Total;
+                    total += investment.Total;
                 }
+                Total = total;
             } catch (InvalidOperationException e)
             {
                 Debug.WriteLine($"{e.Message}");
             }
-            
         }
     }
 

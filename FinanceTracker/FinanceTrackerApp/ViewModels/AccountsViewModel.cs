@@ -17,7 +17,7 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Accounts _accounts;
         [ObservableProperty]
-        private int _accountsTotal = 0;
+        private float _accountsTotal = 0;
         [ObservableProperty]
         private Account? _selectedAccount;
 
