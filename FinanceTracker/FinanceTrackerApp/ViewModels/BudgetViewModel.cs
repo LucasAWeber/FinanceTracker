@@ -13,7 +13,7 @@ namespace FinanceTrackerApp.ViewModels
 {
     public partial class BudgetViewModel : TabViewModelBase
     {
-        private static readonly string s_budgetFileName = Path.Combine(s_appDataFolder, "Budget.csv");
+        private static readonly string s_budgetFileName = Path.Combine(s_appDataFolder, "Budget1.csv");
         [ObservableProperty]
         private Array _budgetItemTypes = Enum.GetValues(typeof(BudgetItemType));
         [ObservableProperty]
@@ -72,8 +72,8 @@ namespace FinanceTrackerApp.ViewModels
                 // Handles the account linking logic
                 if (!string.IsNullOrWhiteSpace(item.AccountName) && item.AccountName != "None")
                 {
-                    item.Account = Data.AccountList.Where(account => account.Name == item.AccountName).First();
-                    item.AccountId = item.Account.Id;
+                    //item.Account = Data.AccountList.Where(account => account.Name == item.AccountName).First();
+                    //item.AccountId = item.Account.Id;
                 }
                 else if (item.Account != null && item.AccountName == "None")
                 {
@@ -82,8 +82,8 @@ namespace FinanceTrackerApp.ViewModels
                 }
                 else if (!string.IsNullOrWhiteSpace(item.AccountId))
                 {
-                    item.Account = Data.AccountList.Where(account => account.Id == item.AccountId).First();
-                    item.AccountName = item.Account.Name;
+                    //item.Account = Data.AccountList.Where(account => account.Id == item.AccountId).First();
+                    //item.AccountName = item.Account.Name;
                 }
 
                 // Handles the total budget values

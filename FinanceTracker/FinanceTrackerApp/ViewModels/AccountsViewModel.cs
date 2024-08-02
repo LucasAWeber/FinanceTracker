@@ -13,7 +13,7 @@ namespace FinanceTrackerApp.ViewModels
 {
     public partial class AccountsViewModel : TabViewModelBase
     {
-        private static readonly string s_accountsFileName = Path.Combine(s_appDataFolder, "Accounts.csv");
+        private static readonly string s_accountsFileName = Path.Combine(s_appDataFolder, "Accounts1.csv");
         [ObservableProperty]
         private Data _data;
         [ObservableProperty]
@@ -24,13 +24,22 @@ namespace FinanceTrackerApp.ViewModels
         public AccountsViewModel(Data data)
         {
             Data = data;
-            Data.AccountList = GetData<Account, AccountMap>(s_accountsFileName);
+            //Data.AccountIds = GetData<string>(s_accountsFileName);
+            //Data.AccountList[Today] = GetData<Account, AccountMap>(s_accountsFileName);
+            //Data.AccountList = GetData<Account, AccountMap>(s_accountsFileName);
+            Data.GetAccounts(DateOnly.FromDateTime(DateTime.Now));
             Update();
         }
 
         public override void Closing()
         {
-            SetData<Account, AccountMap>(s_accountsFileName, Data.AccountList);
+            Data.SetAccounts();
+            //SetData<string>(s_accountsFileName, Data.AccountIds);
+            //foreach (string id in Data.AccountIds)
+            //{
+            //SetData<Account, AccountMap>(Path.Combine(s_appDataFolder, id + ".csv"), Data.AccountList[id]);
+            //}
+            //SetData<Account, AccountMap>(s_accountsFileName, Data.AccountList);
         }
 
         [RelayCommand]
@@ -42,20 +51,20 @@ namespace FinanceTrackerApp.ViewModels
         [RelayCommand]
         private void Delete()
         {
-            if (SelectedAccount != null)
-            {
-                Data.AccountList.Remove(SelectedAccount);
-            }
+            //if (SelectedAccount != null)
+            //{
+                //Data.AccountList.Remove(SelectedAccount);
+            //}
         }
 
         [RelayCommand]
         private void Update()
         {
-            AccountsTotal = 0;
-            foreach (Account account in Data.AccountList)
-            {
-                AccountsTotal += account.Total;
-            }
+            //AccountsTotal = 0;
+            //foreach (Account account in Data.AccountList)
+            //{
+                //AccountsTotal += account.Total;
+            //}
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FinanceTrackerApp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,8 @@ namespace FinanceTrackerApp.Models
 {
     public partial class Data : ObservableObject
     {
+        [ObservableProperty]
+        private Database _database = new();
         [ObservableProperty]
         private ObservableCollection<string> _accountNameList = new();
         private ObservableCollection<Account> _accountList = new();
@@ -28,6 +31,8 @@ namespace FinanceTrackerApp.Models
             }
         }
 
+        [ObservableProperty]
+        private ObservableCollection<string> _investingAccountIds = new();
         [ObservableProperty]
         private ObservableCollection<string> _investingAccountNameList = new();
         private ObservableCollection<InvestingAccount> _investingAccountList = new();
@@ -51,5 +56,15 @@ namespace FinanceTrackerApp.Models
 
         [ObservableProperty]
         private ObservableCollection<BudgetItem> _debtList = new();
+
+        public void SetAccounts()
+        {
+            Database.SetAccounts(AccountList);
+        }
+
+        public void GetAccounts(DateOnly date)
+        {
+            AccountList = Database.GetAccounts(date);
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace FinanceTrackerApp.Models
     {
         [ObservableProperty]
         [Index(0)]
-        private string _id = Guid.NewGuid().ToString("N");
+        private int _id = 1;
         [ObservableProperty]
         [Index(1)]
         private string _name = "";

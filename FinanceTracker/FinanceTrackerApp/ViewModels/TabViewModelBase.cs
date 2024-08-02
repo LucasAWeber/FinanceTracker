@@ -23,6 +23,8 @@ namespace FinanceTrackerApp.ViewModels
             MissingFieldFound = null,
             
         };
+        [ObservableProperty]
+        private DateOnly _today = DateOnly.FromDateTime(DateTime.Now);
 
         public abstract void Closing();
 
