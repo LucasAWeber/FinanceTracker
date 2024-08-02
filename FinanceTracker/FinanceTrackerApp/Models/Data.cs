@@ -48,5 +48,8 @@ namespace FinanceTrackerApp.Models
 
         [ObservableProperty]
         private ObservableCollection<BudgetItem> _budgetItems = new();
+
+        [ObservableProperty]
+        private ObservableCollection<BudgetItem> _debtList = new();
     }
 }

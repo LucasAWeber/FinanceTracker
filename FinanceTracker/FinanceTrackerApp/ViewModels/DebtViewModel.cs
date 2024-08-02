@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinanceTrackerApp.ViewModels
 {
-    public partial class DebtViewModel : ObservableObject
+    public partial class DebtViewModel : TabViewModelBase
     {
         [ObservableProperty]
         private Data _data;
@@ -16,6 +16,11 @@ namespace FinanceTrackerApp.ViewModels
         public DebtViewModel(Data data)
         {
             Data = data;
+        }
+
+        public override void Closing()
+        {
+
         }
     }
 }

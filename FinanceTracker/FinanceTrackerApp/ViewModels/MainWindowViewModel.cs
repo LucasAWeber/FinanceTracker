@@ -18,19 +18,22 @@ namespace FinanceTrackerApp.ViewModels
     public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
-        private Data _accounts = new();
+        private Data _data = new();
         [ObservableProperty]
         private AccountsViewModel _accountsViewModel;
         [ObservableProperty]
         private InvestingAccountsViewModel _investingAccountsViewModel;
         [ObservableProperty]
         private BudgetViewModel _budgetViewModel;
+        [ObservableProperty]
+        private DebtViewModel _debtViewModel;
 
         public MainWindowViewModel()
         {
-            InvestingAccountsViewModel = new(Accounts);
-            AccountsViewModel = new(Accounts);
-            BudgetViewModel = new(Accounts);
+            InvestingAccountsViewModel = new(Data);
+            AccountsViewModel = new(Data);
+            BudgetViewModel = new(Data);
+            DebtViewModel = new(Data);
         }
 
         /// <summary>
@@ -42,6 +45,7 @@ namespace FinanceTrackerApp.ViewModels
             AccountsViewModel.Closing();
             InvestingAccountsViewModel.Closing();
             BudgetViewModel.Closing();
+            DebtViewModel.Closing();
         }
     }
 }

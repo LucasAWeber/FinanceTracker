@@ -13,32 +13,35 @@ namespace FinanceTrackerApp.Models
     {
         [ObservableProperty]
         [Index(0)]
-        private string _name = "";
+        private string _id = Guid.NewGuid().ToString("N");
         [ObservableProperty]
         [Index(1)]
-        private float _total = 0;
+        private string _name = "";
         [ObservableProperty]
         [Index(2)]
+        private float _total = 0;
+        [ObservableProperty]
+        [Index(3)]
         private string _accountId = "";
         [ObservableProperty]
         private string _accountName = "None";
         [ObservableProperty]
         private Account? _account;
         [ObservableProperty]
-        [Index(3)]
+        [Index(4)]
         private string _investingAccountId = "";
         [ObservableProperty]
         private string _investingAccountName = "None";
         [ObservableProperty]
         private Account? _investingAccount;
         [ObservableProperty]
-        [Index(4)]
+        [Index(5)]
         private FrequencyType _frequency = FrequencyType.Weekly;
         [ObservableProperty]
-        [Index(5)]
+        [Index(6)]
         private BudgetItemType _type = BudgetItemType.Other;
         [ObservableProperty]
-        [Index(6)]
+        [Index(7)]
         private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
     }
 
@@ -46,13 +49,14 @@ namespace FinanceTrackerApp.Models
     {
         public BudgetItemMap()
         {
-            Map(m => m.Name).Index(0);
-            Map(m => m.Total).Index(1);
-            Map(m => m.AccountId).Index(2);
-            Map(m => m.InvestingAccountId).Index(3);
-            Map(m => m.Frequency).Index(4);
-            Map(m => m.Type).Index(5);
-            Map(m => m.Date).Index(6);
+            Map(m => m.Id).Index(0);
+            Map(m => m.Name).Index(1);
+            Map(m => m.Total).Index(2);
+            Map(m => m.AccountId).Index(3);
+            Map(m => m.InvestingAccountId).Index(4);
+            Map(m => m.Frequency).Index(5);
+            Map(m => m.Type).Index(6);
+            Map(m => m.Date).Index(7);
             Map(m => m.Account).Ignore();
             Map(m => m.AccountName).Ignore();
             Map(m => m.InvestingAccount).Ignore();
