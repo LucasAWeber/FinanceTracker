@@ -15,7 +15,7 @@ namespace FinanceTrackerApp.ViewModels
 {
     public partial class InvestingAccountsViewModel : TabViewModelBase
     {
-        private static readonly string s_investingAccountsFileName = Path.Combine(s_appDataFolder, "InvestingAccounts1.csv");
+        private static readonly string s_investingAccountsFileName = Path.Combine(s_appDataFolder, "InvestingAccounts.csv");
         [ObservableProperty]
         private Array _investingAccountTypes = Enum.GetValues(typeof(InvestingAccountType));
         [ObservableProperty]

@@ -9,6 +9,8 @@ using System.Data.Entity;
 using System.Collections.ObjectModel;
 using FinanceTrackerApp.Models;
 using System.Diagnostics;
+using Flurl.Util;
+using System.Security.Principal;
 
 namespace FinanceTrackerApp.Helpers
 {
@@ -21,6 +23,10 @@ namespace FinanceTrackerApp.Helpers
 
         public Database()
         {
+            if (!Directory.Exists(s_appDataFolder))
+            {
+                Directory.CreateDirectory(s_appDataFolder);
+            }
             if (!File.Exists(_filename))
             {
                 CreateDatabase();
@@ -48,7 +54,7 @@ namespace FinanceTrackerApp.Helpers
             //SELECT account_id, account_name, account_total, account_interest, MAX(account_date) FROM account GROUP BY account_id
             ObservableCollection<Account> accounts = new();
             _connection.Open();
-            string commandString = $"SELECT account_id, account_name, account_total, account_interest, account_date FROM account WHERE account_date='{date}'  GROUP BY account_id";
+            string commandString = $"SELECT account_id, account_name, account_total, account_interest, account_date FROM account WHERE account_date='{date.ToInvariantString()}'  GROUP BY account_id";
             SQLiteCommand command = new(commandString, _connection);
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -60,7 +66,7 @@ namespace FinanceTrackerApp.Helpers
                     Name = reader["account_name"].ToString(),
                     Total = float.Parse(reader["account_id"].ToString()),
                     Interest = float.Parse(reader["account_interest"].ToString()),
-                    Date = DateOnly.ParseExact(reader["account_date"].ToString(), "dd/MM/yyyy")
+                    Date = DateOnly.ParseExact(reader["account_date"].ToString(), "MM/dd/yyyy")
                 });
             }
             _connection.Close();
@@ -76,14 +82,23 @@ namespace FinanceTrackerApp.Helpers
             {
                 int index = accounts.IndexOf(account);
                 _connection.Open();
-                commandString = $"SELECT * FROM account WHERE account_id={index} AND account_date='{account.Date}'";
+                commandString = $"SELECT * FROM account WHERE account_id={index} AND account_date='{account.Date.ToInvariantString()}'";
                 command = new(commandString, _connection);
                 reader = command.ExecuteReader();
                 if (!reader.Read())
                 {
                     _connection.Close();
                     _connection.Open();
-                    commandString = $"INSERT INTO account (account_id, account_name, account_total, account_interest, account_date) VALUES ('{index}', '{account.Name}', {account.Total}, {account.Interest}, '{account.Date}');";
+                    commandString = $"INSERT INTO account (account_id, account_name, account_total, account_interest, account_date) VALUES ('{index}', '{account.Name}', {account.Total}, {account.Interest}, '{account.Date.ToInvariantString()}');";
+                    command = new(commandString, _connection);
+                    command.ExecuteNonQuery();
+                    _connection.Close();
+                }
+                else
+                {
+                    _connection.Close();
+                    _connection.Open();
+                    commandString = $"UPDATE account SET account_total={account.Total}, account_interest={account.Interest}";
                     command = new(commandString, _connection);
                     command.ExecuteNonQuery();
                     _connection.Close();

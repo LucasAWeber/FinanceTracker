@@ -13,7 +13,7 @@ namespace FinanceTrackerApp.ViewModels
 {
     public partial class BudgetViewModel : TabViewModelBase
     {
-        private static readonly string s_budgetFileName = Path.Combine(s_appDataFolder, "Budget1.csv");
+        private static readonly string s_budgetFileName = Path.Combine(s_appDataFolder, "Budget.csv");
         [ObservableProperty]
         private Array _budgetItemTypes = Enum.GetValues(typeof(BudgetItemType));
         [ObservableProperty]

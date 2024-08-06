@@ -13,7 +13,7 @@ namespace FinanceTrackerApp.ViewModels
 {
     public partial class AccountsViewModel : TabViewModelBase
     {
-        private static readonly string s_accountsFileName = Path.Combine(s_appDataFolder, "Accounts1.csv");
+        private static readonly string s_accountsFileName = Path.Combine(s_appDataFolder, "Accounts.csv");
         [ObservableProperty]
         private Data _data;
         [ObservableProperty]

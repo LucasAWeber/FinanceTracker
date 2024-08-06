@@ -78,15 +78,15 @@ namespace FinanceTrackerApp.ViewModels
             if (!File.Exists(filename))
             {
                 File.Create(filename).Close();
-                File.SetAttributes(filename, File.GetAttributes(filename) | FileAttributes.Hidden);
-                File.Encrypt(filename);
+                //File.SetAttributes(filename, File.GetAttributes(filename) | FileAttributes.Hidden);
+                //File.Encrypt(filename);
             }
             FileInfo myFile = new(filename);
-            myFile.Attributes &= ~FileAttributes.Hidden;
+            //myFile.Attributes &= ~FileAttributes.Hidden;
             using StreamReader reader = new(filename);
             using CsvReader csvRead = new(reader, s_csvConfig);
             IEnumerable<T> records = csvRead.GetRecords<T>();
-            myFile.Attributes |= FileAttributes.Hidden;
+            //myFile.Attributes |= FileAttributes.Hidden;
             return new ObservableCollection<T>(records);
         }
 
@@ -95,16 +95,16 @@ namespace FinanceTrackerApp.ViewModels
             if (!File.Exists(filename))
             {
                 File.Create(filename).Close();
-                File.SetAttributes(filename, File.GetAttributes(filename) | FileAttributes.Hidden);
-                File.Encrypt(filename);
+                //File.SetAttributes(filename, File.GetAttributes(filename) | FileAttributes.Hidden);
+                //File.Encrypt(filename);
             }
             FileInfo myFile = new(filename);
-            myFile.Attributes &= ~FileAttributes.Hidden;
+            //myFile.Attributes &= ~FileAttributes.Hidden;
             using StreamReader reader = new(filename);
             using CsvReader csvRead = new(reader, s_csvConfig);
             csvRead.Context.RegisterClassMap<F>();
             IEnumerable<T> records = csvRead.GetRecords<T>();
-            myFile.Attributes |= FileAttributes.Hidden;
+            //myFile.Attributes |= FileAttributes.Hidden;
             return new ObservableCollection<T>(records);
         }
     }
