@@ -16,7 +16,7 @@ namespace FinanceTrackerApp.Helpers
 {
     public class Database
     {
-        protected static readonly string s_appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FinanceTracker");
+        private static readonly string s_appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FinanceTracker");
         private static readonly string _filename = Path.Combine(s_appDataFolder,"FinanceTracker.sqlite");
         private static readonly string _connectionString = $"Data Source={_filename};";
         private SQLiteConnection _connection;

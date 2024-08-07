@@ -16,7 +16,6 @@ namespace FinanceTrackerApp.ViewModels
 {
     public partial class InvestingAccountsViewModel : TabViewModelBase
     {
-        private static readonly string s_investingAccountsFileName = Path.Combine(s_appDataFolder, "InvestingAccounts.csv");
         [ObservableProperty]
         private Array _investingAccountTypes = Enum.GetValues(typeof(InvestingAccountType));
         [ObservableProperty]
@@ -36,22 +35,12 @@ namespace FinanceTrackerApp.ViewModels
         {
             Data = data;
             Data.GetInvestingAccounts();
-            /*Data.InvestingAccountList = GetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName);
-            foreach(InvestingAccount account in Data.InvestingAccountList)
-            {
-                account.Investments = GetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder,account.Id + ".csv"));
-            }*/
             _ = Update();
         }   
 
         public override void Closing()
         {
             Data.SetInvestingAccounts();
-            /*foreach (InvestingAccount account in Data.InvestingAccountList)
-            {
-                SetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder, account.Id + ".csv"), account.Investments);
-            }
-            SetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName, Data.InvestingAccountList);*/
         }
 
         [RelayCommand]

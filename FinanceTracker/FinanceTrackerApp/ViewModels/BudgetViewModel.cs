@@ -13,7 +13,6 @@ namespace FinanceTrackerApp.ViewModels
 {
     public partial class BudgetViewModel : TabViewModelBase
     {
-        private static readonly string s_budgetFileName = Path.Combine(s_appDataFolder, "Budget.csv");
         [ObservableProperty]
         private Array _budgetItemTypes = Enum.GetValues(typeof(BudgetItemType));
         [ObservableProperty]
@@ -35,13 +34,13 @@ namespace FinanceTrackerApp.ViewModels
         public BudgetViewModel(Data data)
         {
             Data = data;
-            //Data.BudgetItems = GetData<BudgetItem, BudgetItemMap>(s_budgetFileName);
+
             Update();
         }
 
         public override void Closing()
         {
-            //SetData<BudgetItem, BudgetItemMap>(s_budgetFileName, Data.BudgetItems);
+
         }
 
         [RelayCommand]
@@ -67,7 +66,7 @@ namespace FinanceTrackerApp.ViewModels
             float monthlyTotal = 0;
             float yearlyTotal = 0;
 
-            foreach(BudgetItem item in Data.BudgetItems)
+            /*foreach(BudgetItem item in Data.BudgetItems)
             {
                 // Handles the account linking logic
                 if (!string.IsNullOrWhiteSpace(item.AccountName) && item.AccountName != "None")
@@ -77,8 +76,8 @@ namespace FinanceTrackerApp.ViewModels
                 }
                 else if (item.Account != null && item.AccountName == "None")
                 {
-                    item.Account = null;
-                    item.AccountId = "";
+                    //item.Account = null;
+                    //item.AccountId = -1;
                 }
                 else if (!string.IsNullOrWhiteSpace(item.AccountId))
                 {
@@ -114,7 +113,7 @@ namespace FinanceTrackerApp.ViewModels
                         yearlyTotal += item.Total;
                         break;
                 }
-            }
+            }*/
             BudgetDailyTotal = dailyTotal;
             BudgetWeeklyTotal = weeklyTotal;
             BudgetMonthlyTotal = monthlyTotal;

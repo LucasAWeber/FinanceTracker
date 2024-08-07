@@ -1,6 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,19 +13,14 @@ namespace FinanceTrackerApp.Models
     public partial class InvestingAccount : ObservableObject
     {
         [ObservableProperty]
-        [Index(0)]
         private int _id = -1;
         [ObservableProperty]
-        [Index(1)]
         private string _name = "";
         [ObservableProperty]
-        [Index(2)]
         private float _total = 0;
         [ObservableProperty]
-        [Index(3)]
         private InvestingAccountType _type = InvestingAccountType.nonregistered;
         [ObservableProperty]
-        [Index(4)]
         private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
         [ObservableProperty]
         private ObservableCollection<Investment> _investments = new();
@@ -47,19 +40,6 @@ namespace FinanceTrackerApp.Models
             {
                 Debug.WriteLine($"{e.Message}");
             }
-        }
-    }
-
-    public sealed class InvestingAccountMap : ClassMap<InvestingAccount>
-    {
-        public InvestingAccountMap()
-        {
-            Map(m => m.Id).Index(0);
-            Map(m => m.Name).Index(1);
-            Map(m => m.Total).Index(2);
-            Map(m => m.Type).Index(3);
-            Map(m => m.Date).Index(4);
-            Map(m => m.Investments).Ignore();
         }
     }
 }
