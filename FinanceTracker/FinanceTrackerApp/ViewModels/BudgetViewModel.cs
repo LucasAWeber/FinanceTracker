@@ -18,7 +18,7 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Array _frequencyTypes = Enum.GetValues(typeof(FrequencyType));
         [ObservableProperty]
-        private Data _data;
+        private Controller _data;
         
         [ObservableProperty]
         private float _budgetDailyTotal = 0;
@@ -31,7 +31,7 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private BudgetItem? _selectedBudgetItem;
 
-        public BudgetViewModel(Data data)
+        public BudgetViewModel(Controller data)
         {
             Data = data;
 

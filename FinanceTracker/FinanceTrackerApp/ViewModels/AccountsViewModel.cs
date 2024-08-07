@@ -14,13 +14,13 @@ namespace FinanceTrackerApp.ViewModels
     public partial class AccountsViewModel : TabViewModelBase
     {
         [ObservableProperty]
-        private Data _data;
+        private Controller _data;
         [ObservableProperty]
         private float _accountsTotal = 0;
         [ObservableProperty]
         private Account? _selectedAccount;
 
-        public AccountsViewModel(Data data)
+        public AccountsViewModel(Controller data)
         {
             Data = data;
             Data.GetAccounts();

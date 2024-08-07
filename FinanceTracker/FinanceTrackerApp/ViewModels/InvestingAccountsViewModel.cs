@@ -23,7 +23,7 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Array _stockExchanges = Enum.GetValues(typeof(StockExchange));
         [ObservableProperty]
-        private Data _data;
+        private Controller _data;
         [ObservableProperty]
         private float _investingAccountsTotal = 0;
         [ObservableProperty]
@@ -31,7 +31,7 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Investment? _selectedInvestment;
 
-        public InvestingAccountsViewModel(Data data)
+        public InvestingAccountsViewModel(Controller data)
         {
             Data = data;
             Data.GetInvestingAccounts();

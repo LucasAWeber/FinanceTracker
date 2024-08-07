@@ -11,9 +11,9 @@ namespace FinanceTrackerApp.ViewModels
     public partial class DebtViewModel : TabViewModelBase
     {
         [ObservableProperty]
-        private Data _data;
+        private Controller _data;
 
-        public DebtViewModel(Data data)
+        public DebtViewModel(Controller data)
         {
             Data = data;
         }
