@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using YahooFinanceApi;
@@ -34,21 +35,23 @@ namespace FinanceTrackerApp.ViewModels
         public InvestingAccountsViewModel(Data data)
         {
             Data = data;
-            //Data.InvestingAccountList = GetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName);
+            Data.GetInvestingAccounts();
+            /*Data.InvestingAccountList = GetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName);
             foreach(InvestingAccount account in Data.InvestingAccountList)
             {
-                //account.Investments = GetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder,account.Id + ".csv"));
-            }
+                account.Investments = GetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder,account.Id + ".csv"));
+            }*/
             _ = Update();
         }   
 
         public override void Closing()
         {
-            foreach (InvestingAccount account in Data.InvestingAccountList)
+            Data.SetInvestingAccounts();
+            /*foreach (InvestingAccount account in Data.InvestingAccountList)
             {
-                //SetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder, account.Id + ".csv"), account.Investments);
+                SetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder, account.Id + ".csv"), account.Investments);
             }
-            //SetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName, Data.InvestingAccountList);
+            SetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName, Data.InvestingAccountList);*/
         }
 
         [RelayCommand]
@@ -68,7 +71,7 @@ namespace FinanceTrackerApp.ViewModels
         {
             if (SelectedInvestingAccount != null)
             {
-                Data.InvestingAccountList.Remove(SelectedInvestingAccount);
+                Data.DeleteInvestingAccount(SelectedInvestingAccount);
             }
         }
 

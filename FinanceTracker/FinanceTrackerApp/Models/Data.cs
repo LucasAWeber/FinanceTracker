@@ -59,14 +59,37 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private ObservableCollection<BudgetItem> _debtList = new();
 
+
+        public void DeleteAccount(Account account)
+        {
+            AccountList.Remove(account);
+            Database.DeleteAccount(account);
+        }
+
+        public void GetAccounts()
+        {
+            AccountList = Database.GetAccounts(Date);
+        }
+
         public void SetAccounts()
         {
             Database.SetAccounts(AccountList);
         }
 
-        public void GetAccounts(DateOnly date)
+        public void DeleteInvestingAccount(InvestingAccount account)
         {
-            AccountList = Database.GetAccounts(date);
+            InvestingAccountList.Remove(account);
+            Database.DeleteInvestingAccount(account);
+        }
+
+        public void GetInvestingAccounts()
+        {
+            InvestingAccountList = Database.GetInvestingAccounts(Date);
+        }
+
+        public void SetInvestingAccounts()
+        {
+            Database.SetInvestingAccounts(InvestingAccountList);
         }
     }
 }

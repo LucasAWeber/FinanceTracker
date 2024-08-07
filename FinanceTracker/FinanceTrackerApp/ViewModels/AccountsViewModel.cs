@@ -27,7 +27,7 @@ namespace FinanceTrackerApp.ViewModels
             //Data.AccountIds = GetData<string>(s_accountsFileName);
             //Data.AccountList[Today] = GetData<Account, AccountMap>(s_accountsFileName);
             //Data.AccountList = GetData<Account, AccountMap>(s_accountsFileName);
-            Data.GetAccounts(Data.Date);
+            Data.GetAccounts();
             Update();
         }
 
@@ -51,10 +51,10 @@ namespace FinanceTrackerApp.ViewModels
         [RelayCommand]
         private void Delete()
         {
-            //if (SelectedAccount != null)
-            //{
-                //Data.AccountList.Remove(SelectedAccount);
-            //}
+            if (SelectedAccount != null)
+            {
+                Data.DeleteAccount(SelectedAccount);
+            }
         }
 
         [RelayCommand]
