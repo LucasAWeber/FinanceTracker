@@ -35,13 +35,13 @@ namespace FinanceTrackerApp.ViewModels
         public BudgetViewModel(Data data)
         {
             Data = data;
-            Data.BudgetItems = GetData<BudgetItem, BudgetItemMap>(s_budgetFileName);
+            //Data.BudgetItems = GetData<BudgetItem, BudgetItemMap>(s_budgetFileName);
             Update();
         }
 
         public override void Closing()
         {
-            SetData<BudgetItem, BudgetItemMap>(s_budgetFileName, Data.BudgetItems);
+            //SetData<BudgetItem, BudgetItemMap>(s_budgetFileName, Data.BudgetItems);
         }
 
         [RelayCommand]

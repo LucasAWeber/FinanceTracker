@@ -27,7 +27,7 @@ namespace FinanceTrackerApp.ViewModels
             //Data.AccountIds = GetData<string>(s_accountsFileName);
             //Data.AccountList[Today] = GetData<Account, AccountMap>(s_accountsFileName);
             //Data.AccountList = GetData<Account, AccountMap>(s_accountsFileName);
-            Data.GetAccounts(DateOnly.FromDateTime(DateTime.Now));
+            Data.GetAccounts(Data.Date);
             Update();
         }
 

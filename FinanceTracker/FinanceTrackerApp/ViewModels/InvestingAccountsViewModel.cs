@@ -34,10 +34,10 @@ namespace FinanceTrackerApp.ViewModels
         public InvestingAccountsViewModel(Data data)
         {
             Data = data;
-            Data.InvestingAccountList = GetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName);
+            //Data.InvestingAccountList = GetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName);
             foreach(InvestingAccount account in Data.InvestingAccountList)
             {
-                account.Investments = GetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder,account.Id + ".csv"));
+                //account.Investments = GetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder,account.Id + ".csv"));
             }
             _ = Update();
         }   
@@ -46,9 +46,9 @@ namespace FinanceTrackerApp.ViewModels
         {
             foreach (InvestingAccount account in Data.InvestingAccountList)
             {
-                SetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder, account.Id + ".csv"), account.Investments);
+                //SetData<Investment, InvestmentMap>(Path.Combine(s_appDataFolder, account.Id + ".csv"), account.Investments);
             }
-            SetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName, Data.InvestingAccountList);
+            //SetData<InvestingAccount, InvestingAccountMap>(s_investingAccountsFileName, Data.InvestingAccountList);
         }
 
         [RelayCommand]

@@ -14,6 +14,8 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private Database _database = new();
         [ObservableProperty]
+        private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
+        [ObservableProperty]
         private ObservableCollection<string> _accountNameList = new();
         private ObservableCollection<Account> _accountList = new();
         public ObservableCollection<Account> AccountList
