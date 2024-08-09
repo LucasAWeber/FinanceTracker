@@ -37,7 +37,7 @@ namespace FinanceTrackerApp.Helpers
             }
             using SQLiteConnection connection = new(_connectionString);
 
-            // create account tables
+            // create account info table
             connection.Open();
             commandString = $"CREATE TABLE IF NOT EXISTS account_info (account_info_id INTEGER PRIMARY KEY, account_name VARCHAR(100));";
             using (SQLiteCommand command = new(commandString, connection))
@@ -45,6 +45,8 @@ namespace FinanceTrackerApp.Helpers
                 command.ExecuteNonQuery();
             }
             connection.Close();
+
+            // create account table
             connection.Open();
             commandString = $"CREATE TABLE IF NOT EXISTS account (account_id INTEGER PRIMARY KEY, account_info_id INTEGER NOT NULL, account_total REAL, account_interest REAL, account_date VARCHAR(10), FOREIGN KEY (account_info_id) REFERENCES account_info (account_info_id));";
             using (SQLiteCommand command = new(commandString, connection))
@@ -53,7 +55,7 @@ namespace FinanceTrackerApp.Helpers
             }
             connection.Close();
 
-            // create investing account tables
+            // create investing account info table
             connection.Open();
             commandString = $"CREATE TABLE IF NOT EXISTS investing_account_info (investing_account_info_id INTEGER PRIMARY KEY, investing_account_info_name VARCHAR(100), investing_account_info_type INTEGER);";
             using (SQLiteCommand command = new(commandString, connection))
@@ -61,6 +63,8 @@ namespace FinanceTrackerApp.Helpers
                 command.ExecuteNonQuery();
             }
             connection.Close();
+
+            // create investing account table
             connection.Open();
             commandString = $"CREATE TABLE IF NOT EXISTS investing_account (investing_account_id INTEGER PRIMARY KEY, investing_account_info_id INTEGER, investing_account_date VARCHAR(10), FOREIGN KEY (investing_account_info_id) REFERENCES investing_account_info (investing_account_info_id));";
             using (SQLiteCommand command = new(commandString, connection))
@@ -69,7 +73,7 @@ namespace FinanceTrackerApp.Helpers
             }
             connection.Close();
 
-            // creates investment table
+            // create investment table
             connection.Open();
             commandString = $"CREATE TABLE IF NOT EXISTS investment (investment_id INTEGER PRIMARY KEY, investment_shares INTEGER, investment_item_id INTEGER, investing_account_id INTEGER, FOREIGN KEY (investment_item_id) REFERENCES investment_item (investment_item_id), FOREIGN KEY (investing_account_id) REFERENCES investing_account (investing_account_id));";
             using (SQLiteCommand command = new(commandString, connection))
@@ -78,7 +82,7 @@ namespace FinanceTrackerApp.Helpers
             }
             connection.Close();
 
-            // create investment item tables
+            // create investment item table
             connection.Open();
             commandString = $"CREATE TABLE IF NOT EXISTS investment_item (investment_item_id INTEGER PRIMARY KEY, investment_item_name VARCHAR(100), investment_item_symbol VARCHAR(100), investment_item_type INTEGER, investment_item_stock_exchange INTEGER);";
             using (SQLiteCommand command = new(commandString, connection))
