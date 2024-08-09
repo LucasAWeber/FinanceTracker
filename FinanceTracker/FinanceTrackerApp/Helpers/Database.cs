@@ -92,6 +92,22 @@ namespace FinanceTrackerApp.Helpers
             _connection.Close();
         }
 
+        public int GetInsertedRowId()
+        {
+            int rowId = -1;
+            string commandString = $"SELECT last_insert_rowid();";
+            using (SQLiteCommand command = new(commandString, _connection))
+            {
+                using SQLiteDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    rowId = int.Parse(reader[0].ToString());
+                }
+
+            }
+            return rowId;
+        }
+
         public void DeleteAccount(Account account)
         {
             _connection.Open();
@@ -191,14 +207,32 @@ namespace FinanceTrackerApp.Helpers
         public void DeleteInvestingAccount(InvestingAccount account)
         {
             _connection.Open();
-            string commandString = $"DELETE FROM investing_account WHERE investing_account_info_id={account.Id}";
+            string commandString = $"DELETE FROM investing_account_info WHERE investing_account_info_id=(SELECT investing_account_info_id FROM investing_account WHERE investing_account_id={account.Id})";
             using (SQLiteCommand command = new(commandString, _connection))
             {
                 command.ExecuteNonQuery();
             }
             _connection.Close();
             _connection.Open();
-            commandString = $"DELETE FROM investing_account_info WHERE investing_account_info_id={account.Id}";
+            commandString = $"DELETE FROM investing_account WHERE investing_account_info_id={account.Id}";
+            using (SQLiteCommand command = new(commandString, _connection))
+            {
+                command.ExecuteNonQuery();
+            }
+            _connection.Close();
+        }
+
+        public void DeleteInvestment(Investment investment)
+        {
+            _connection.Open();
+            string commandString = $"DELETE FROM investment_item WHERE investment_item_id=(SELECT investment_item_id FROM investment WHERE investment_id={investment.Id})";
+            using (SQLiteCommand command = new(commandString, _connection))
+            {
+                command.ExecuteNonQuery();
+            }
+            _connection.Close();
+            _connection.Open();
+            commandString = $"DELETE FROM investment WHERE investment_id={investment.Id}";
             using (SQLiteCommand command = new(commandString, _connection))
             {
                 command.ExecuteNonQuery();
@@ -252,80 +286,104 @@ namespace FinanceTrackerApp.Helpers
             return accounts;
         }
 
+        private void SetInvestments(InvestingAccount account)
+        {
+            string commandString;
+            bool newInvestment;
+            foreach (Investment investment in account.Investments)
+            {
+                _connection.Close();
+                _connection.Open();
+                commandString = $"SELECT exists(SELECT 1 FROM investment WHERE investment_id={investment.Id}) AS row_exists;";
+                using (SQLiteCommand command = new(commandString, _connection))
+                {
+                    using SQLiteDataReader reader = command.ExecuteReader();
+                    newInvestment = !reader.Read() || int.Parse(reader[0].ToString()) == 0;
+                }
+
+                if (newInvestment)
+                {
+                    int investmentItemId;
+                    _connection.Close();
+                    _connection.Open();
+                    commandString = $"INSERT INTO investment_item (investment_item_name, investment_item_symbol, investment_item_type, investment_item_stock_exchange) VALUES ('{investment.Name}', '{investment.Symbol}', {(int)investment.Type}, {(int)investment.StockExchange});";
+                    using (SQLiteCommand command = new(commandString, _connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    investmentItemId = GetInsertedRowId();
+
+                    _connection.Close();
+                    _connection.Open();
+                    commandString = $"INSERT INTO investment (investment_shares, investment_item_id, investing_account_id) VALUES ({investment.Shares}, {investmentItemId}, {account.Id});";
+                    using (SQLiteCommand command = new(commandString, _connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    _connection.Close();
+                    _connection.Open();
+                    commandString = $"UPDATE investment SET investment_shares={investment.Shares} WHERE investment_id={investment.Id}";
+                    using (SQLiteCommand command = new(commandString, _connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    _connection.Close();
+                    _connection.Open();
+                    commandString = $"UPDATE investment_item SET investment_item_name='{investment.Name}', investment_item_symbol='{investment.Symbol}', investment_item_type={(int)investment.Type}, investment_item_stock_exchange={(int)investment.StockExchange} WHERE investment_item_id=(SELECT investment_item_id FROM investment WHERE investment_id={investment.Id})";
+                    using (SQLiteCommand command = new(commandString, _connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
         public void SetInvestingAccounts(ObservableCollection<InvestingAccount> accounts)
         {
             string commandString;
-            bool NewEntry;
+            bool newInvestmentAccount;
             foreach (InvestingAccount account in accounts)
             {
-                int accountInfoId;
+                int accountInfoId = -1;
 
+                // Checks if investment exists
                 _connection.Open();
                 commandString = $"SELECT exists(SELECT 1 FROM investing_account WHERE investing_account_id={account.Id}) AS row_exists;";
-                using SQLiteCommand selectCommand = new(commandString, _connection);
-                using (SQLiteDataReader reader = selectCommand.ExecuteReader())
+                using (SQLiteCommand command = new(commandString, _connection))
                 {
-                    NewEntry = !reader.Read() || int.Parse(reader[0].ToString()) == 0;
+                    using SQLiteDataReader reader = command.ExecuteReader();
+                    newInvestmentAccount = !reader.Read() || int.Parse(reader[0].ToString()) == 0;
                 }
-                if (NewEntry)
+                
+                if (newInvestmentAccount)
                 {
                     _connection.Close();
                     _connection.Open();
                     commandString = $"INSERT INTO investing_account_info (investing_account_info_name, investing_account_info_type) VALUES ('{account.Name}', {(int)account.Type});";
-                    using (SQLiteCommand insertInfoCommand = new(commandString, _connection))
+                    using (SQLiteCommand command = new(commandString, _connection))
                     {
-                        insertInfoCommand.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
                     }
-
-                    string getRowIdString = $"SELECT last_insert_rowid();";
-                    using (SQLiteCommand selectIdCommand = new(getRowIdString, _connection))
-                    {
-                        using SQLiteDataReader reader = selectIdCommand.ExecuteReader();
-                        accountInfoId = int.Parse(reader[0].ToString());
-                    }
+                    
+                    accountInfoId = GetInsertedRowId();
                     
 
                     _connection.Close();
                     _connection.Open();
                     commandString = $"INSERT INTO investing_account (investing_account_info_id, investing_account_date) VALUES ('{accountInfoId}', '{account.Date.ToInvariantString()}');";
-                    using (SQLiteCommand insertCommand = new(commandString, _connection))
+                    using (SQLiteCommand command = new(commandString, _connection))
                     {
-                        insertCommand.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
                     }
 
-                    int accountId;
-                    getRowIdString = $"SELECT last_insert_rowid();";
-                    using (SQLiteCommand selectIdCommand = new(getRowIdString, _connection))
-                    {
-                        using SQLiteDataReader reader = selectIdCommand.ExecuteReader();
-                        accountId = int.Parse(reader[0].ToString());
-                    }
-                    
-                    foreach (Investment investment in account.Investments)
-                    {
-                        int investmentItemId;
-                        _connection.Close();
-                        _connection.Open();
-                        commandString = $"INSERT INTO investment_item (investment_item_name, investment_item_symbol, investment_item_type, investment_item_stock_exchange) VALUES ('{investment.Name}', '{investment.Symbol}', {(int)investment.Type}, {(int)investment.StockExchange});";
-                        using (SQLiteCommand insertCommand = new(commandString, _connection)) {
-                            insertCommand.ExecuteNonQuery();
-                        }
+                    account.Id = GetInsertedRowId();
 
-                        getRowIdString = $"SELECT last_insert_rowid();";
-                        using (SQLiteCommand selectIdCommand = new(getRowIdString, _connection))
-                        {
-                            using SQLiteDataReader reader = selectIdCommand.ExecuteReader();
-                            investmentItemId = int.Parse(reader[0].ToString());
-                        }
-
-                        _connection.Close();
-                        _connection.Open();
-                        commandString = $"INSERT INTO investment (investment_shares, investment_item_id, investing_account_id) VALUES ({investment.Shares}, {investmentItemId}, {accountId});";
-                        using (SQLiteCommand insertCommand = new(commandString, _connection))
-                        {
-                            insertCommand.ExecuteNonQuery();
-                        }
-                    }
+                    SetInvestments(account);
                 }
                 else
                 {
@@ -333,36 +391,25 @@ namespace FinanceTrackerApp.Helpers
                     _connection.Close();
                     _connection.Open();
                     commandString = $"SELECT investing_account_info_id FROM investing_account WHERE investing_account_id={account.Id}";
-                    using SQLiteCommand getIdCommand = new(commandString, _connection);
-                    using SQLiteDataReader reader = getIdCommand.ExecuteReader();
-                    accountInfoId = int.Parse(reader[0].ToString());
+                    using (SQLiteCommand command = new(commandString, _connection))
+                    {
+                        using SQLiteDataReader reader = command.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            accountInfoId = int.Parse(reader[0].ToString());
+                        }
+                    }
 
                     // update account info table
                     _connection.Close();
                     _connection.Open();
                     commandString = $"UPDATE investing_account_info SET investing_account_info_name='{account.Name}', investing_account_info_type={(int)account.Type} WHERE investing_account_info_id={accountInfoId}";
-                    using SQLiteCommand updateNameCommand = new(commandString, _connection);
-                    updateNameCommand.ExecuteNonQuery();
-
-                    // add investments
-                    foreach(Investment investment in account.Investments)
+                    using (SQLiteCommand command = new(commandString, _connection))
                     {
-                        _connection.Close();
-                        _connection.Open();
-                        commandString = $"UPDATE investment SET investment_shares={investment.Shares} WHERE investment_id={investment.Id}";
-                        using (SQLiteCommand updateCommand = new(commandString, _connection))
-                        {
-                            updateCommand.ExecuteNonQuery();
-                        }
-
-                        _connection.Close();
-                        _connection.Open();
-                        commandString = $"UPDATE investment_item SET investment_item_name='{investment.Name}', investment_item_symbol='{investment.Symbol}', investment_item_type={(int)investment.Type}, investment_item_stock_exchange={(int)investment.StockExchange} WHERE investment_item_id=(SELECT investment_item_id FROM investment WHERE investment_id={investment.Id})";
-                        using (SQLiteCommand updateCommand = new(commandString, _connection))
-                        {
-                            updateCommand.ExecuteNonQuery();
-                        }
+                        command.ExecuteNonQuery();
                     }
+
+                    SetInvestments(account);
                 }
                 _connection.Close();
             }

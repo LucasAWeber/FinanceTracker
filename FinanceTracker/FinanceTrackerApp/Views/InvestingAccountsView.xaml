@@ -12,7 +12,7 @@
         <h:BindingProxy x:Key="proxy" BindingDataContext="{Binding}"/>
     </UserControl.Resources>
     <StackPanel>
-        <DataGrid ItemsSource="{Binding Data.InvestingAccountList, IsAsync=True}" SelectedItem="{Binding SelectedInvestingAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+        <DataGrid ItemsSource="{Binding Controller.InvestingAccountList, IsAsync=True}" SelectedItem="{Binding SelectedInvestingAccount}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add" Command="{Binding AddAccountCommand}"/>

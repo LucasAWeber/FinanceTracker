@@ -23,7 +23,7 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Array _stockExchanges = Enum.GetValues(typeof(StockExchange));
         [ObservableProperty]
-        private Controller _data;
+        private Controller _controller;
         [ObservableProperty]
         private float _investingAccountsTotal = 0;
         [ObservableProperty]
@@ -31,22 +31,22 @@ namespace FinanceTrackerApp.ViewModels
         [ObservableProperty]
         private Investment? _selectedInvestment;
 
-        public InvestingAccountsViewModel(Controller data)
+        public InvestingAccountsViewModel(Controller controller)
         {
-            Data = data;
-            Data.GetInvestingAccounts();
+            Controller = controller;
+            Controller.GetInvestingAccounts();
             _ = Update();
         }   
 
         public override void Closing()
         {
-            Data.SetInvestingAccounts();
+            Controller.SetInvestingAccounts();
         }
 
         [RelayCommand]
         private void AddAccount()
         {
-            Data.InvestingAccountList.Add(new());
+            Controller.InvestingAccountList.Add(new());
         }
 
         [RelayCommand]
@@ -60,16 +60,16 @@ namespace FinanceTrackerApp.ViewModels
         {
             if (SelectedInvestingAccount != null)
             {
-                Data.DeleteInvestingAccount(SelectedInvestingAccount);
+                Controller.DeleteInvestingAccount(SelectedInvestingAccount);
             }
         }
 
         [RelayCommand]
         private void DeleteInvestment()
         {
-            if (SelectedInvestment != null)
+            if (SelectedInvestingAccount != null && SelectedInvestment != null)
             {
-                SelectedInvestingAccount?.Investments.Remove(SelectedInvestment);
+                Controller.DeleteInvestment(SelectedInvestingAccount, SelectedInvestment);
             }
         }
 
@@ -77,7 +77,7 @@ namespace FinanceTrackerApp.ViewModels
         private async Task Update()
         {
             float total = 0;
-            foreach (InvestingAccount account in Data.InvestingAccountList)
+            foreach (InvestingAccount account in Controller.InvestingAccountList)
             {
                 await account.UpdateInvestmentAccount();
                 total += account.Total;

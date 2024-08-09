@@ -82,6 +82,12 @@ namespace FinanceTrackerApp.Models
             Database.DeleteInvestingAccount(account);
         }
 
+        public void DeleteInvestment(InvestingAccount account, Investment investment)
+        {
+            account.Investments.Remove(investment);
+            Database.DeleteInvestment(investment);
+        }
+
         public void GetInvestingAccounts()
         {
             InvestingAccountList = Database.GetInvestingAccounts(Date);

@@ -14,28 +14,28 @@ namespace FinanceTrackerApp.ViewModels
     public partial class AccountsViewModel : TabViewModelBase
     {
         [ObservableProperty]
-        private Controller _data;
+        private Controller _controller;
         [ObservableProperty]
         private float _accountsTotal = 0;
         [ObservableProperty]
         private Account? _selectedAccount;
 
-        public AccountsViewModel(Controller data)
+        public AccountsViewModel(Controller controller)
         {
-            Data = data;
-            Data.GetAccounts();
+            Controller = controller;
+            Controller.GetAccounts();
             Update();
         }
 
         public override void Closing()
         {
-            Data.SetAccounts();
+            Controller.SetAccounts();
         }
 
         [RelayCommand]
         private void Add()
         {
-            Data.AccountList.Add(new());
+            Controller.AccountList.Add(new());
         }
 
         [RelayCommand]
@@ -43,7 +43,7 @@ namespace FinanceTrackerApp.ViewModels
         {
             if (SelectedAccount != null)
             {
-                Data.DeleteAccount(SelectedAccount);
+                Controller.DeleteAccount(SelectedAccount);
             }
         }
 
@@ -51,7 +51,7 @@ namespace FinanceTrackerApp.ViewModels
         private void Update()
         {
             AccountsTotal = 0;
-            foreach (Account account in Data.AccountList)
+            foreach (Account account in Controller.AccountList)
             {
                 AccountsTotal += account.Total;
             }

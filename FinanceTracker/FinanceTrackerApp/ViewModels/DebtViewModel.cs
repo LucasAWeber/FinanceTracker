@@ -11,11 +11,11 @@ namespace FinanceTrackerApp.ViewModels
     public partial class DebtViewModel : TabViewModelBase
     {
         [ObservableProperty]
-        private Controller _data;
+        private Controller _controller;
 
-        public DebtViewModel(Controller data)
+        public DebtViewModel(Controller controller)
         {
-            Data = data;
+            Controller = controller;
         }
 
         public override void Closing()
