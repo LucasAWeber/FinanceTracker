@@ -63,39 +63,39 @@ namespace FinanceTrackerApp.Models
         public void DeleteAccount(Account account)
         {
             AccountList.Remove(account);
-            Database.DeleteAccount(account);
+            Task.Run(() => Database.DeleteAccount(account));
         }
 
         public void GetAccounts()
         {
-            AccountList = Database.GetAccounts(Date);
+            Task.Run(() => AccountList = Database.GetAccounts(Date));
         }
 
         public void SetAccounts()
         {
-            Database.SetAccounts(AccountList);
+            Task.Run(() => Database.SetAccounts(AccountList));
         }
 
         public void DeleteInvestingAccount(InvestingAccount account)
         {
             InvestingAccountList.Remove(account);
-            Database.DeleteInvestingAccount(account);
+            Task.Run(() => Database.DeleteInvestingAccount(account));
         }
 
         public void DeleteInvestment(InvestingAccount account, Investment investment)
         {
             account.Investments.Remove(investment);
-            Database.DeleteInvestment(investment);
+            Task.Run(() => Database.DeleteInvestment(investment));
         }
 
         public void GetInvestingAccounts()
         {
-            InvestingAccountList = Database.GetInvestingAccounts(Date);
+            Task.Run(() => InvestingAccountList = Database.GetInvestingAccounts(Date));
         }
 
         public void SetInvestingAccounts()
         {
-            Database.SetInvestingAccounts(InvestingAccountList);
+            Task.Run(() => Database.SetInvestingAccounts(InvestingAccountList));
         }
     }
 }
