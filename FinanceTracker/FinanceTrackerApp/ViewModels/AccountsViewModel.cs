@@ -23,13 +23,20 @@ namespace FinanceTrackerApp.ViewModels
         public AccountsViewModel(Controller controller)
         {
             Controller = controller;
-            Controller.GetAccounts();
-            Update();
+            Task.Run(() =>
+            {
+                Controller.GetAccounts();
+                Update();
+            });
+            
         }
 
         public override void Closing()
         {
-            Controller.SetAccounts();
+            Task.Run(() =>
+            {
+                Controller.SetAccounts();
+            });
         }
 
         [RelayCommand]

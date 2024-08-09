@@ -15,6 +15,8 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private int _id = -1;
         [ObservableProperty]
+        private int _infoId = -1;
+        [ObservableProperty]
         private string _name = "";
         [ObservableProperty]
         private float _total = 0;
@@ -24,6 +26,14 @@ namespace FinanceTrackerApp.Models
         private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
         [ObservableProperty]
         private ObservableCollection<Investment> _investments = new();
+
+        public InvestingAccount(DateOnly? date = null)
+        {
+            if (date != null)
+            {
+                Date = (DateOnly)date;
+            }
+        }
 
         public async Task UpdateInvestmentAccount()
         {

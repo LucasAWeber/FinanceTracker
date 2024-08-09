@@ -15,6 +15,8 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private int _id = -1;
         [ObservableProperty]
+        private int _itemId = -1;
+        [ObservableProperty]
         private string _name = "";
         [ObservableProperty]
         private string _symbol = "";

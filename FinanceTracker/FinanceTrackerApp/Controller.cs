@@ -12,7 +12,7 @@ namespace FinanceTrackerApp.Models
     public partial class Controller : ObservableObject
     {
         [ObservableProperty]
-        private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
+        private DateOnly _date = DateOnly.FromDateTime(DateTime.Now).AddDays(3);
         [ObservableProperty]
         private ObservableCollection<string> _accountNameList = new();
         private ObservableCollection<Account> _accountList = new();
@@ -70,12 +70,12 @@ namespace FinanceTrackerApp.Models
 
         public void GetAccounts()
         {
-            Task.Run(() => AccountList = Database.GetAccounts(Date));
+            AccountList = Database.GetAccounts(Date);
         }
 
         public void SetAccounts()
         {
-            Task.Run(() => Database.SetAccounts(AccountList));
+            Database.SetAccounts(AccountList);
         }
 
         public void DeleteInvestingAccount(InvestingAccount account)
@@ -92,12 +92,12 @@ namespace FinanceTrackerApp.Models
 
         public void GetInvestingAccounts()
         {
-            Task.Run(() => InvestingAccountList = Database.GetInvestingAccounts(Date));
+            InvestingAccountList = Database.GetInvestingAccounts(Date);
         }
 
         public void SetInvestingAccounts()
         {
-            Task.Run(() => Database.SetInvestingAccounts(InvestingAccountList));
+            Database.SetInvestingAccounts(InvestingAccountList);
         }
     }
 }

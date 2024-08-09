@@ -34,8 +34,12 @@ namespace FinanceTrackerApp.ViewModels
         public InvestingAccountsViewModel(Controller controller)
         {
             Controller = controller;
-            Controller.GetInvestingAccounts();
-            _ = Update();
+            Task.Run(async () =>
+            {
+                Controller.GetInvestingAccounts();
+                await Update();
+            });
+            
         }   
 
         public override void Closing()
@@ -46,13 +50,16 @@ namespace FinanceTrackerApp.ViewModels
         [RelayCommand]
         private void AddAccount()
         {
-            Controller.InvestingAccountList.Add(new());
+            Controller.InvestingAccountList.Add(new(Controller.Date));
         }
 
         [RelayCommand]
         private void AddInvestment()
         {
-            SelectedInvestingAccount?.Investments.Add(new());
+            if (SelectedInvestingAccount != null)
+            {
+                SelectedInvestingAccount.Investments.Add(new());
+            }
         }
 
         [RelayCommand]
