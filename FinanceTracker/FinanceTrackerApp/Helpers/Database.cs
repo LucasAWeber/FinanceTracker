@@ -206,6 +206,10 @@ namespace FinanceTrackerApp.Helpers
 
         public void DeleteInvestingAccount(InvestingAccount account)
         {
+            foreach (Investment investment in account.Investments)
+            {
+                DeleteInvestment(investment);
+            }
             _connection.Open();
             string commandString = $"DELETE FROM investing_account_info WHERE investing_account_info_id=(SELECT investing_account_info_id FROM investing_account WHERE investing_account_id={account.Id})";
             using (SQLiteCommand command = new(commandString, _connection))

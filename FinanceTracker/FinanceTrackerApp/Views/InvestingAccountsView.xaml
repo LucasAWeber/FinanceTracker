@@ -35,7 +35,7 @@
             <TextBlock Text="{Binding InvestingAccountsTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
             <Button VerticalAlignment="Center" HorizontalAlignment="Right" Content="Add" Command="{Binding AddAccountCommand}" Width="50" Height="20"/>
         </DockPanel>
-        <DataGrid ItemsSource="{Binding SelectedInvestingAccount.Investments, IsAsync=True}" SelectedItem="{Binding SelectedInvestment}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+        <DataGrid CellEditEnding="DataGrid_CellEditEnding" ItemsSource="{Binding SelectedInvestingAccount.Investments, IsAsync=True}" SelectedItem="{Binding SelectedInvestment}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add" Command="{Binding AddInvestmentCommand}"/>
@@ -53,8 +53,8 @@
                 <DataGridTextColumn Binding="{Binding Shares}" Header="Shares" Width="1*"/>
                 <DataGridTextColumn Binding="{Binding Value}" Header="Value" Width="1*"/>
                 <DataGridTextColumn Binding="{Binding Total}" Header="Total ($)" IsReadOnly="True" Width="1*"/>
-                <DataGridComboBoxColumn TextBinding="{Binding Type}" Header="Type" ItemsSource="{Binding Path=BindingDataContext.InvestmentTypes, Source={StaticResource proxy}}" Width="1*"/>
-                <DataGridComboBoxColumn TextBinding="{Binding StockExchange}" Header="Stock Exchange" ItemsSource="{Binding Path=BindingDataContext.StockExchanges, Source={StaticResource proxy}}" Width="1*"/>
+                <DataGridComboBoxColumn TextBinding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" Header="Type" ItemsSource="{Binding Path=BindingDataContext.InvestmentTypes, Source={StaticResource proxy}}" Width="1*"/>
+                <DataGridComboBoxColumn TextBinding="{Binding StockExchange, UpdateSourceTrigger=PropertyChanged}" Header="Stock Exchange" ItemsSource="{Binding Path=BindingDataContext.StockExchanges, Source={StaticResource proxy}}" Width="1*"/>
             </DataGrid.Columns>
         </DataGrid>
         <DockPanel Margin="10">
