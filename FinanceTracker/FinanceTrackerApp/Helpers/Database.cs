@@ -87,7 +87,7 @@ namespace FinanceTrackerApp.Helpers
             connection.Close();
         }
 
-        public static int GetInsertedRowId(SQLiteConnection connection)
+        private static int GetInsertedRowId(SQLiteConnection connection)
         {
             int rowId = -1;
             string commandString = $"SELECT last_insert_rowid();";
@@ -103,18 +103,39 @@ namespace FinanceTrackerApp.Helpers
             return rowId;
         }
 
+        private static bool RowExist(SQLiteConnection connection, string table, int id)
+        {
+            string commandString = $"SELECT exists(SELECT 1 FROM {table} WHERE {table}_id={id}) AS row_exists;";
+            using (SQLiteCommand command = new(commandString, connection))
+            {
+                using SQLiteDataReader reader = command.ExecuteReader();
+                return reader.Read() && int.Parse(reader[0].ToString()) != 0;
+            }
+        }
+
+        private static bool RowExist(SQLiteConnection connection, string table, int id, DateOnly date)
+        {
+            string commandString = $"SELECT exists(SELECT 1 FROM {table} WHERE {table}_id={id} AND {table}_date='{date.ToString(_dateFormat)}') AS row_exists;";
+            using (SQLiteCommand command = new(commandString, connection))
+            {
+                using SQLiteDataReader reader = command.ExecuteReader();
+                return reader.Read() && int.Parse(reader[0].ToString()) != 0;
+            }
+        }
+
         public static void DeleteAccount(Account account)
         {
+            string commandString;
             using SQLiteConnection connection = new(_connectionString);
             connection.Open();
-            string commandString = $"DELETE FROM account WHERE account_info_id={account.Id}";
+            commandString = $"DELETE FROM account_info WHERE account_info_id=(SELECT account_info_id FROM account WHERE account_id={account.Id})";
             using (SQLiteCommand command = new(commandString, connection))
             {
                 command.ExecuteNonQuery();
             }
             connection.Close();
             connection.Open();
-            commandString = $"DELETE FROM account_info WHERE account_info_id={account.Id}";
+            commandString = $"DELETE FROM account WHERE account_id={account.Id}";
             using (SQLiteCommand command = new(commandString, connection))
             {
                 command.ExecuteNonQuery();
@@ -124,79 +145,131 @@ namespace FinanceTrackerApp.Helpers
 
         public static ObservableCollection<Account> GetAccounts(DateOnly date)
         {
+            string commandString;
             using SQLiteConnection connection = new(_connectionString);
             ObservableCollection<Account> accounts = new();
+
             connection.Open();
-            string commandString = $"SELECT account_info.account_info_id, account_name, account_total, account_interest, account_date FROM account INNER JOIN account_info ON account_info.account_info_id=account.account_info_id WHERE account_date='{date.ToString(_dateFormat)}'";
-            using SQLiteCommand command = new(commandString, connection);
-            using SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            commandString = $"SELECT * FROM account_info";
+            using (SQLiteCommand command = new(commandString, connection))
             {
-                accounts.Add(new()
+                using SQLiteDataReader reader = command.ExecuteReader();
+                while(reader.Read())
                 {
-                    Id = int.Parse(reader["account_info_id"].ToString()),
-                    Name = reader["account_name"].ToString(),
-                    Total = float.Parse(reader["account_total"].ToString()),
-                    Interest = float.Parse(reader["account_interest"].ToString()),
-                    Date = DateOnly.ParseExact(reader["account_date"].ToString(), _dateFormat)
-                });
+                    accounts.Add(new()
+                    {
+                        InfoId = int.Parse(reader["account_info_id"].ToString()),
+                        Name = reader["account_name"].ToString(),
+                        Date = date
+                    });
+                }
+            }
+            
+            foreach (Account account in accounts)
+            {
+                connection.Close();
+                connection.Open();
+                commandString = $"SELECT account_id, account_total, account_interest, account_date FROM account INNER JOIN account_info ON account_info.account_info_id=account.account_info_id WHERE account.account_info_id={account.InfoId} AND account_date<='{date.ToString(_dateFormat)}' ORDER BY account_date DESC";
+                using (SQLiteCommand command = new(commandString, connection))
+                {
+                    using SQLiteDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        account.Id = int.Parse(reader["account_id"].ToString());
+                        account.Total = float.Parse(reader["account_total"].ToString());
+                        account.Interest = float.Parse(reader["account_interest"].ToString());
+                    }
+                }
             }
             connection.Close();
+
+            /*connection.Open();
+            commandString = $"SELECT account.account_info_id, account_id, account_name, account_total, account_interest, account_date FROM account INNER JOIN account_info ON account_info.account_info_id=account.account_info_id WHERE account_date='{date.ToString(_dateFormat)}'";
+            using (SQLiteCommand command = new(commandString, connection))
+            {
+                using SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    accounts.Add(new()
+                    {
+                        Id = int.Parse(reader["account_id"].ToString()),
+                        InfoId = int.Parse(reader["account_info_id"].ToString()),
+                        Name = reader["account_name"].ToString(),
+                        Total = float.Parse(reader["account_total"].ToString()),
+                        Interest = float.Parse(reader["account_interest"].ToString()),
+                        Date = DateOnly.ParseExact(reader["account_date"].ToString(), _dateFormat) // change to be current date regardless
+                    });
+                }
+            }
+            connection.Close();*/
             return accounts;
         }
 
         public static void SetAccounts(ObservableCollection<Account> accounts)
         {
             string commandString;
-            bool NewEntry;
+            bool newAccount;
+            bool newAccountInfo;
             using SQLiteConnection connection = new(_connectionString);
+            // temp
+            /*DateOnly date = DateOnly.FromDateTime(DateTime.Now);
+            for (int i = 0; i < 10; i++)
+            {
+                
+            }*/
+            // temp end
             foreach (Account account in accounts)
             {
-                long index = account.Id;
+                //account.Date = date.AddDays(-1 * i);
                 connection.Open();
-                commandString = $"SELECT * FROM account WHERE account_info_id={index} AND account_date='{account.Date.ToString(_dateFormat)}'";
-                using SQLiteCommand selectCommand = new(commandString, connection);
-                using (SQLiteDataReader reader = selectCommand.ExecuteReader())
-                {
-                    NewEntry = !reader.Read();
-                }
-                if (NewEntry)
+                newAccountInfo = !RowExist(connection, "account_info", account.InfoId);
+                if (newAccountInfo)
                 {
                     connection.Close();
                     connection.Open();
                     commandString = $"INSERT INTO account_info (account_name) VALUES ('{account.Name}');";
-                    using (SQLiteCommand insertInfoCommand = new(commandString, connection))
+                    using (SQLiteCommand command = new(commandString, connection))
                     {
-                        insertInfoCommand.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
                     }
-                    commandString = $"SELECT last_insert_rowid();";
-                    using (SQLiteCommand selectIdCommand = new(commandString, connection))
-                    {
-                        using SQLiteDataReader reader = selectIdCommand.ExecuteReader();
-                        if (reader.Read())
-                        {
-                            index = (long)reader[0];
-                        }
-                    }
-                    
-                    connection.Close();
-                    connection.Open();
-                    commandString = $"INSERT INTO account (account_info_id, account_total, account_interest, account_date) VALUES ('{index}', {account.Total}, {account.Interest}, '{account.Date.ToString(_dateFormat)}');";
-                    using SQLiteCommand insertCommand = new(commandString, connection);
-                    insertCommand.ExecuteNonQuery();
+                    account.InfoId = GetInsertedRowId(connection);
                 }
                 else
                 {
                     connection.Close();
                     connection.Open();
-                    commandString = $"UPDATE account_info SET account_name='{account.Name}' WHERE account_info_id={index}";
-                    using SQLiteCommand updateNameCommand = new(commandString, connection);
-                    updateNameCommand.ExecuteNonQuery();
+                    commandString = $"UPDATE account_info SET account_name='{account.Name}' WHERE account_info_id={account.InfoId}";
+                    using (SQLiteCommand command = new(commandString, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                connection.Close();
+                connection.Open();
+                newAccount = !RowExist(connection, "account", account.Id, account.Date);
+
+                if (newAccount)
+                {
                     connection.Close();
                     connection.Open();
-                    commandString = $"UPDATE account SET account_total={account.Total}, account_interest={account.Interest} WHERE account_info_id={index} AND account_date='{account.Date.ToString(_dateFormat)}'";
-                    using SQLiteCommand updateCommand = new(commandString, connection);
-                    updateCommand.ExecuteNonQuery();
+                    commandString = $"INSERT INTO account (account_info_id, account_total, account_interest, account_date) VALUES ('{account.InfoId}', {account.Total}, {account.Interest}, '{account.Date.ToString(_dateFormat)}');";
+                    using (SQLiteCommand command = new(commandString, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    account.Id = GetInsertedRowId(connection);
+                }
+                else
+                {
+
+                    connection.Close();
+                    connection.Open();
+                    commandString = $"UPDATE account SET account_total={account.Total}, account_interest={account.Interest} WHERE account_id={account.Id}";
+                    using (SQLiteCommand command = new(commandString, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
                 }
                 connection.Close();
             }
@@ -299,12 +372,7 @@ namespace FinanceTrackerApp.Helpers
             {
                 connection.Close();
                 connection.Open();
-                commandString = $"SELECT exists(SELECT 1 FROM investment WHERE investment_id={investment.Id}) AS row_exists;";
-                using (SQLiteCommand command = new(commandString, connection))
-                {
-                    using SQLiteDataReader reader = command.ExecuteReader();
-                    newInvestment = !reader.Read() || int.Parse(reader[0].ToString()) == 0;
-                }
+                newInvestment = !RowExist(connection, "investment", investment.Id);
 
                 if (newInvestment)
                 {
@@ -359,12 +427,7 @@ namespace FinanceTrackerApp.Helpers
 
                 // Checks if investment exists
                 connection.Open();
-                commandString = $"SELECT exists(SELECT 1 FROM investing_account WHERE investing_account_id={account.Id}) AS row_exists;";
-                using (SQLiteCommand command = new(commandString, connection))
-                {
-                    using SQLiteDataReader reader = command.ExecuteReader();
-                    newInvestmentAccount = !reader.Read() || int.Parse(reader[0].ToString()) == 0;
-                }
+                newInvestmentAccount = !RowExist(connection, "investing_account", account.Id);
                 
                 if (newInvestmentAccount)
                 {

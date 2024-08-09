@@ -12,6 +12,8 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private int _id = -1;
         [ObservableProperty]
+        private int _infoId = -1;
+        [ObservableProperty]
         private string _name = "";
         [ObservableProperty]
         private float _total = 0;
@@ -19,5 +21,13 @@ namespace FinanceTrackerApp.Models
         private float _interest = 0;
         [ObservableProperty]
         private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
+
+        public Account(DateOnly? date = null)
+        {
+            if (date != null)
+            {
+                Date = (DateOnly)date;
+            }
+        }
     }
 }

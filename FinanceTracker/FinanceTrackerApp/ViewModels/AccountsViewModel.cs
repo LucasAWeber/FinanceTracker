@@ -35,7 +35,7 @@ namespace FinanceTrackerApp.ViewModels
         [RelayCommand]
         private void Add()
         {
-            Controller.AccountList.Add(new());
+            Controller.AccountList.Add(new(Controller.Date));
         }
 
         [RelayCommand]
