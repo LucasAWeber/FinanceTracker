@@ -12,8 +12,6 @@ namespace FinanceTrackerApp.Models
     public partial class Controller : ObservableObject
     {
         [ObservableProperty]
-        private Database _database = new();
-        [ObservableProperty]
         private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
         [ObservableProperty]
         private ObservableCollection<string> _accountNameList = new();
@@ -59,6 +57,10 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private ObservableCollection<BudgetItem> _debtList = new();
 
+        public Controller()
+        {
+            Database.CreateDatabase();
+        }
 
         public void DeleteAccount(Account account)
         {

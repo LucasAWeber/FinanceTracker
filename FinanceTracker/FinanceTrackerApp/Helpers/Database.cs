@@ -15,25 +15,20 @@ using System.Data.Common;
 
 namespace FinanceTrackerApp.Helpers
 {
-    public class Database
+    public static class Database
     {
         private static readonly string s_appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FinanceTracker");
         private static readonly string _filename = Path.Combine(s_appDataFolder,"FinanceTracker.sqlite");
         private static readonly string _connectionString = $"Data Source={_filename};";
         private static readonly string _dateFormat = "yyyy/MM/dd";
 
-        public Database()
+        public static void CreateDatabase()
         {
+            string commandString;
             if (!Directory.Exists(s_appDataFolder))
             {
                 Directory.CreateDirectory(s_appDataFolder);
             }
-            CreateDatabase();
-        }
-
-        private void CreateDatabase()
-        {
-            string commandString;
             // create database and set up connection
             if (!File.Exists(_filename))
             {
@@ -92,7 +87,7 @@ namespace FinanceTrackerApp.Helpers
             connection.Close();
         }
 
-        public int GetInsertedRowId(SQLiteConnection connection)
+        public static int GetInsertedRowId(SQLiteConnection connection)
         {
             int rowId = -1;
             string commandString = $"SELECT last_insert_rowid();";
@@ -108,7 +103,7 @@ namespace FinanceTrackerApp.Helpers
             return rowId;
         }
 
-        public void DeleteAccount(Account account)
+        public static void DeleteAccount(Account account)
         {
             using SQLiteConnection connection = new(_connectionString);
             connection.Open();
@@ -127,7 +122,7 @@ namespace FinanceTrackerApp.Helpers
             connection.Close();
         }
 
-        public ObservableCollection<Account> GetAccounts(DateOnly date)
+        public static ObservableCollection<Account> GetAccounts(DateOnly date)
         {
             using SQLiteConnection connection = new(_connectionString);
             ObservableCollection<Account> accounts = new();
@@ -150,7 +145,7 @@ namespace FinanceTrackerApp.Helpers
             return accounts;
         }
 
-        public void SetAccounts(ObservableCollection<Account> accounts)
+        public static void SetAccounts(ObservableCollection<Account> accounts)
         {
             string commandString;
             bool NewEntry;
@@ -207,7 +202,7 @@ namespace FinanceTrackerApp.Helpers
             }
         }
 
-        public void DeleteInvestingAccount(InvestingAccount account)
+        public static void DeleteInvestingAccount(InvestingAccount account)
         {
             using SQLiteConnection connection = new(_connectionString);
             foreach (Investment investment in account.Investments)
@@ -230,7 +225,7 @@ namespace FinanceTrackerApp.Helpers
             connection.Close();
         }
 
-        public void DeleteInvestment(Investment investment)
+        public static void DeleteInvestment(Investment investment)
         {
             using SQLiteConnection connection = new(_connectionString);
             connection.Open();
@@ -249,7 +244,7 @@ namespace FinanceTrackerApp.Helpers
             connection.Close();
         }
 
-        public ObservableCollection<InvestingAccount> GetInvestingAccounts(DateOnly date)
+        public static ObservableCollection<InvestingAccount> GetInvestingAccounts(DateOnly date)
         {
             using SQLiteConnection connection = new(_connectionString);
             ObservableCollection<InvestingAccount> accounts = new();
@@ -296,7 +291,7 @@ namespace FinanceTrackerApp.Helpers
             return accounts;
         }
 
-        private void SetInvestments(SQLiteConnection connection, InvestingAccount account)
+        private static void SetInvestments(SQLiteConnection connection, InvestingAccount account)
         {
             string commandString;
             bool newInvestment;
@@ -353,7 +348,7 @@ namespace FinanceTrackerApp.Helpers
             }
         }
 
-        public void SetInvestingAccounts(ObservableCollection<InvestingAccount> accounts)
+        public static void SetInvestingAccounts(ObservableCollection<InvestingAccount> accounts)
         {
             string commandString;
             bool newInvestmentAccount;
