@@ -19,7 +19,21 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        <TabControl Background="Black" Foreground="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Button Content=" &lt; " Command="{Binding DecrementDateCommand}" Grid.Column="0" Width="20" Height="20"/>
+            <TextBlock Text="{Binding Controller.Date}" Margin="3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+            <Button Content=" > " Command="{Binding IncrementDateCommand}" Grid.Column="2" Width="20" Height="20"/>
+        </Grid>
+        <TabControl Background="Black" Foreground="White" Grid.Row="1">
             <TabItem Name="Overview" Header="Overview">
                 
             </TabItem>

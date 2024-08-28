@@ -47,5 +47,17 @@ namespace FinanceTrackerApp.ViewModels
             BudgetViewModel.Closing();
             DebtViewModel.Closing();
         }
+
+        [RelayCommand]
+        private void DecrementDate()
+        {
+            Controller.DecrementDate();
+        }
+
+        [RelayCommand]
+        private void IncrementDate()
+        {
+            Controller.IncrementDate();
+        }
     }
 }

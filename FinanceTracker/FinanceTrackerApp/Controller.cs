@@ -12,7 +12,14 @@ namespace FinanceTrackerApp.Models
     public partial class Controller : ObservableObject
     {
         [ObservableProperty]
-        private DateOnly _date = DateOnly.FromDateTime(DateTime.Now).AddDays(3);
+        private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);
+        private static DateOnly Today
+        {
+            get
+            {
+                return DateOnly.FromDateTime(DateTime.Now);
+            }
+        }
         [ObservableProperty]
         private ObservableCollection<string> _accountNameList = new();
         private ObservableCollection<Account> _accountList = new();
@@ -60,6 +67,27 @@ namespace FinanceTrackerApp.Models
         public Controller()
         {
             Database.CreateDatabase();
+        }
+
+        public void IncrementDate()
+        {
+            if (Date < Today)
+            {
+                SetAccounts();
+                SetInvestingAccounts();
+                Date = Date.AddDays(1);
+                GetAccounts();
+                GetInvestingAccounts();
+            }
+        }
+
+        public void DecrementDate()
+        {
+            SetAccounts();
+            SetInvestingAccounts();
+            Date = Date.AddDays(-1);
+            GetAccounts();
+            GetInvestingAccounts();
         }
 
         public void DeleteAccount(Account account)
