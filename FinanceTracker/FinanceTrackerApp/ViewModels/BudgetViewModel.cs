@@ -59,7 +59,7 @@ namespace FinanceTrackerApp.ViewModels
         }
 
         [RelayCommand]
-        private void Update()
+        public override async Task Update()
         {
             float dailyTotal = 0;
             float weeklyTotal = 0;

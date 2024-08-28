@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FinanceTrackerApp.Models;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,12 @@ namespace FinanceTrackerApp.ViewModels
         }
 
         public override void Closing()
+        {
+
+        }
+
+        [RelayCommand]
+        public override async Task Update()
         {
 
         }

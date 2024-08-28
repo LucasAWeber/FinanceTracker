@@ -48,16 +48,26 @@ namespace FinanceTrackerApp.ViewModels
             DebtViewModel.Closing();
         }
 
-        [RelayCommand]
-        private void DecrementDate()
+        private async Task Update()
         {
-            Controller.DecrementDate();
+            await AccountsViewModel.Update();
+            await InvestingAccountsViewModel.Update();
+            await BudgetViewModel.Update();
+            await DebtViewModel.Update();
         }
 
         [RelayCommand]
-        private void IncrementDate()
+        private async Task DecrementDate()
+        {
+            Controller.DecrementDate();
+            await Update();
+        }
+
+        [RelayCommand]
+        private async Task IncrementDate()
         {
             Controller.IncrementDate();
+            await Update();
         }
     }
 }

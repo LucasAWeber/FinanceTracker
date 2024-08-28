@@ -75,7 +75,7 @@ namespace FinanceTrackerApp.Helpers
 
             // create investment table
             connection.Open();
-            commandString = $"CREATE TABLE IF NOT EXISTS investment (investment_id INTEGER PRIMARY KEY, investment_shares INTEGER, investment_item_id INTEGER, investing_account_id INTEGER, FOREIGN KEY (investment_item_id) REFERENCES investment_item (investment_item_id), FOREIGN KEY (investing_account_id) REFERENCES investing_account (investing_account_id));";
+            commandString = $"CREATE TABLE IF NOT EXISTS investment (investment_id INTEGER PRIMARY KEY, investment_shares REAL, investment_value REAL, investment_item_id INTEGER, investing_account_id INTEGER, FOREIGN KEY (investment_item_id) REFERENCES investment_item (investment_item_id), FOREIGN KEY (investing_account_id) REFERENCES investing_account (investing_account_id));";
             using (SQLiteCommand command = new(commandString, connection))
             {
                 command.ExecuteNonQuery();
@@ -260,7 +260,7 @@ namespace FinanceTrackerApp.Helpers
                 DeleteInvestment(investment);
             }
             connection.Open();
-            string commandString = $"DELETE FROM investing_account_info WHERE investing_account_info_id=(SELECT investing_account_info_id FROM investing_account WHERE investing_account_id={account.Id})";
+            string commandString = $"DELETE FROM investing_account_info WHERE investing_account_info_id={account.InfoId}";
             using (SQLiteCommand command = new(commandString, connection))
             {
                 command.ExecuteNonQuery();
@@ -279,7 +279,7 @@ namespace FinanceTrackerApp.Helpers
         {
             using SQLiteConnection connection = new(_connectionString);
             connection.Open();
-            string commandString = $"DELETE FROM investment_item WHERE investment_item_id=(SELECT investment_item_id FROM investment WHERE investment_id={investment.Id})";
+            string commandString = $"DELETE FROM investment_item WHERE investment_item_id={investment.ItemId}";
             using (SQLiteCommand command = new(commandString, connection))
             {
                 command.ExecuteNonQuery();
@@ -333,7 +333,7 @@ namespace FinanceTrackerApp.Helpers
 
                 connection.Close();
                 connection.Open();
-                commandString = $"SELECT investment_id, investment.investment_item_id, investment_shares, investment_item_name, investment_item_symbol, investment_item_type, investment_item_stock_exchange FROM investment INNER JOIN investment_item ON investment.investment_item_id=investment_item.investment_item_id WHERE investing_account_id={account.Id}";
+                commandString = $"SELECT investment_id, investment.investment_item_id, investment_shares, investment_value, investment_item_name, investment_item_symbol, investment_item_type, investment_item_stock_exchange FROM investment INNER JOIN investment_item ON investment.investment_item_id=investment_item.investment_item_id WHERE investing_account_id={account.Id}";
                 using (SQLiteCommand command = new(commandString, connection))
                 {
                     using SQLiteDataReader reader = command.ExecuteReader();
@@ -346,6 +346,7 @@ namespace FinanceTrackerApp.Helpers
                             Name = reader["investment_item_name"].ToString(),
                             Symbol = reader["investment_item_symbol"].ToString(),
                             Shares = float.Parse(reader["investment_shares"].ToString()),
+                            Value = float.Parse(reader["investment_value"].ToString()),
                             Type = (InvestmentType)Enum.Parse(typeof(InvestmentType), reader["investment_item_type"].ToString()),
                             StockExchange = (StockExchange)Enum.Parse(typeof(StockExchange), reader["investment_item_stock_exchange"].ToString())
                         });
@@ -408,7 +409,7 @@ namespace FinanceTrackerApp.Helpers
                 {
                     connection.Close();
                     connection.Open();
-                    commandString = $"INSERT INTO investment (investment_shares, investment_item_id, investing_account_id) VALUES ({investment.Shares}, {investment.ItemId}, {account.Id});";
+                    commandString = $"INSERT INTO investment (investment_shares, investment_value, investment_item_id, investing_account_id) VALUES ({investment.Shares}, {investment.Value}, {investment.ItemId}, {account.Id});";
                     using (SQLiteCommand command = new(commandString, connection))
                     {
                         command.ExecuteNonQuery();

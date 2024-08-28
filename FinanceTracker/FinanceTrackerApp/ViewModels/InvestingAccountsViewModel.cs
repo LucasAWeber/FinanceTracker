@@ -81,7 +81,7 @@ namespace FinanceTrackerApp.ViewModels
         }
 
         [RelayCommand]
-        private async Task Update()
+        public override async Task Update()
         {
             float total = 0;
             foreach (InvestingAccount account in Controller.InvestingAccountList)
