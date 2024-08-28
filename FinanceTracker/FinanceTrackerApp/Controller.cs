@@ -24,15 +24,18 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private ObservableCollection<Account> _accountList = new();
         [ObservableProperty]
-        private ObservableCollection<string> _investingAccountIds = new();
-        [ObservableProperty]
         private ObservableCollection<InvestingAccount> _investingAccountList = new();
+        [ObservableProperty]
+        private ObservableCollection<BudgetItem> _budgetList = new();
+        [ObservableProperty]
+        private ObservableCollection<DebtItem> _debtList = new();
 
         [ObservableProperty]
-        private ObservableCollection<BudgetItem> _budgetItems = new();
-
+        private float _accountsTotal = 0;
         [ObservableProperty]
-        private ObservableCollection<BudgetItem> _debtList = new();
+        private float _investingAccountsTotal = 0;
+        [ObservableProperty]
+        private float _DebtTotal;
 
         public Controller()
         {
@@ -71,6 +74,16 @@ namespace FinanceTrackerApp.Models
             AccountList = Database.GetAccounts(Date);
         }
 
+        public void UpdateAccounts()
+        {
+            float total = 0;
+            foreach (Account account in AccountList)
+            {
+                total += account.Total;
+            }
+            AccountsTotal = total;
+        }
+
         public void SetAccounts()
         {
             Database.SetAccounts(AccountList);
@@ -91,6 +104,17 @@ namespace FinanceTrackerApp.Models
         public void GetInvestingAccounts()
         {
             InvestingAccountList = Database.GetInvestingAccounts(Date);
+        }
+
+        public async Task UpdateInvestingAccounts()
+        {
+            float total = 0;
+            foreach (InvestingAccount account in InvestingAccountList)
+            {
+                await account.UpdateInvestmentAccount();
+                total += account.Total;
+            }
+            InvestingAccountsTotal = total;
         }
 
         public void SetInvestingAccounts()

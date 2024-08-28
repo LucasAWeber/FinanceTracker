@@ -19,6 +19,9 @@
     <Compile Update="Views\InvestingAccountsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\OverviewView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
@@ -34,6 +37,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\InvestingAccountsView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\OverviewView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

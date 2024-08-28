@@ -14,8 +14,6 @@ namespace FinanceTrackerApp.Models
         [ObservableProperty]
         private string _name = "";
         [ObservableProperty]
-        private string _accountId = "";
-        [ObservableProperty]
         private float _total = 0;
         [ObservableProperty]
         private DateOnly _date = DateOnly.FromDateTime(DateTime.Now);

@@ -12,11 +12,16 @@ namespace FinanceTrackerApp.ViewModels
     public partial class DebtViewModel : TabViewModelBase
     {
         [ObservableProperty]
-        private Controller _controller;
+        private Controller _data;
+        [ObservableProperty]
+        private float _DebtTotal;
+        [ObservableProperty]
+        private DebtItem? _selectedDebtItem;
 
-        public DebtViewModel(Controller controller)
+        public DebtViewModel(Controller data)
         {
-            Controller = controller;
+            Data = data;
+            Update();
         }
 
         public override void Closing()
@@ -27,7 +32,27 @@ namespace FinanceTrackerApp.ViewModels
         [RelayCommand]
         public override async Task Update()
         {
+            float total = 0;
+            foreach (DebtItem item in Data.DebtList)
+            {
+                total += item.Total;
+            }
+            DebtTotal = total;
+        }
 
+        [RelayCommand]
+        private void Add()
+        {
+            Data.DebtList.Add(new());
+        }
+
+        [RelayCommand]
+        private void Delete()
+        {
+            if (SelectedDebtItem != null)
+            {
+                Data.DebtList.Remove(SelectedDebtItem);
+            }
         }
     }
 }

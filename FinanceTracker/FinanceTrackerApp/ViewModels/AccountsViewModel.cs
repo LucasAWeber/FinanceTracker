@@ -57,11 +57,12 @@ namespace FinanceTrackerApp.ViewModels
         [RelayCommand]
         public override async Task Update()
         {
-            AccountsTotal = 0;
+            float total = 0;
             foreach (Account account in Controller.AccountList)
             {
-                AccountsTotal += account.Total;
+                total += account.Total;
             }
+            AccountsTotal = total;
         }
     }
 }

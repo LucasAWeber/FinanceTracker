@@ -46,7 +46,7 @@ namespace FinanceTrackerApp.ViewModels
         [RelayCommand]
         private void Add()
         {
-            Data.BudgetItems.Add(new());
+            Data.BudgetList.Add(new());
         }
 
         [RelayCommand]
@@ -54,7 +54,7 @@ namespace FinanceTrackerApp.ViewModels
         {
             if (SelectedBudgetItem != null)
             {
-                Data.BudgetItems.Remove(SelectedBudgetItem);
+                Data.BudgetList.Remove(SelectedBudgetItem);
             }
         }
 

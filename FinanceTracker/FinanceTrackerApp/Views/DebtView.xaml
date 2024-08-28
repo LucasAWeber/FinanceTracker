@@ -3,10 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:h="clr-namespace:FinanceTrackerApp.Helpers"
              xmlns:local="clr-namespace:FinanceTrackerApp.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-
-    </Grid>
+    <UserControl.Resources>
+        <h:BindingProxy x:Key="proxy" BindingDataContext="{Binding}"/>
+    </UserControl.Resources>
+    <WrapPanel Orientation="Horizontal">
+        <StackPanel>
+            <DataGrid ItemsSource="{Binding Data.DebtList, IsAsync=True}" SelectedItem="{Binding SelectedBudgetItem}" Background="Black" RowBackground="DarkGray" AlternatingRowBackground="LightGray" MinColumnWidth="100" MinRowHeight="20" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add" Command="{Binding AddCommand}"/>
+                        <MenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="CellEditEnding">
+                        <i:InvokeCommandAction Command="{Binding UpdateCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" Width="1*"/>
+                    <DataGridTextColumn Binding="{Binding Total}" Header="Total ($)" Width="1*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DockPanel Margin="10">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Total Debt: " Foreground="White"/>
+                        <TextBlock Text="{Binding DebtTotal, UpdateSourceTrigger=PropertyChanged}" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button Margin="0,2,0,0" DockPanel.Dock="Right" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Add" Command="{Binding AddCommand}" Width="50" Height="20"/>
+            </DockPanel>
+        </StackPanel>
+    </WrapPanel>
 </UserControl>
